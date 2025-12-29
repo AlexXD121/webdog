@@ -1,0 +1,9 @@
+
+# Secrets
+webdog_bot/token
+token
+.env
+
+# Python
+__pycache__/
+*.pyc
