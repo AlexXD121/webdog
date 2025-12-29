@@ -1,0 +1,9 @@
+/home/ubuntu/webdog_bot/webdog.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 640 ubuntu ubuntu
+}

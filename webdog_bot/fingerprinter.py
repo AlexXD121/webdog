@@ -185,10 +185,17 @@ class VersionedContentFingerprinter:
         content_hash = hashlib.md5(stable_content.encode('utf-8')).hexdigest()
         
         # 6. Return Data Model
+        
+        # Populate content_weights with tag counts for structural similarity
+        tag_counts = {}
+        for tag in soup.find_all():
+            tag_name = tag.name
+            tag_counts[tag_name] = tag_counts.get(tag_name, 0.0) + 1.0
+            
         return WeightedFingerprint(
             hash=content_hash,
             version=self.VERSION,
             algorithm="weighted_semantic_v2",
-            content_weights={}, # Can populate if we did advanced granular scoring
-            structure_signature="" # Can add DOM tree sig later
+            content_weights=tag_counts, 
+            structure_signature="" 
         )

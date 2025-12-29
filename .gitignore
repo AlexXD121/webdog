@@ -10,3 +10,33 @@ imp.txt
 __pycache__/
 *.pyc
 
+
+# Runtime Data
+webdog_bot/db.json
+webdog_bot/db.json.backup*
+webdog_bot/exports/
+exports/
+*.log
+webdog.log
+
+# Environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.coverage
+htmlcov/
+coverage.xml
+.pytest_cache/
+smoke_output.txt
+
+# Kiro
+.kiro/
+**/.kiro/

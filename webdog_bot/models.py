@@ -90,6 +90,7 @@ class MonitorMetadata:
     check_count: int = 0
     failure_count: int = 0
     circuit_breaker_state: str = "CLOSED"
+    rate_limit_count: int = 0
     snooze_until: Optional[str] = None
 
 @dataclass

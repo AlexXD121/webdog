@@ -127,3 +127,47 @@ class SimilarityEngine:
         If Score is 0.80 (80% similar) -> Alert.
         """
         return score < user_threshold
+
+    def calculate_similarity(self, fp1: WeightedFingerprint, fp2: WeightedFingerprint) -> SimilarityMetrics:
+        """
+        Calculates similarity between two fingerprints based on their content weights (structural tags).
+        Since we don't have the original text, we rely on structural similarity.
+        """
+        if fp1.hash == fp2.hash:
+            return SimilarityMetrics(final_score=1.0, semantic=1.0)
+            
+        # Compare content_weights (Tag Counts)
+        w1 = fp1.content_weights
+        w2 = fp2.content_weights
+        
+        all_keys = set(w1.keys()).union(set(w2.keys()))
+        if not all_keys:
+            return SimilarityMetrics(final_score=1.0) # Both empty = same
+            
+        total_diff = 0.0
+        total_count = 0.0
+        
+        for k in all_keys:
+            v1 = w1.get(k, 0.0)
+            v2 = w2.get(k, 0.0)
+            total_diff += abs(v1 - v2)
+            total_count += v1 + v2
+            
+        semantic_score = 1.0
+        if total_count > 0:
+            semantic_score = 1.0 - (total_diff / total_count)
+            
+        # Since we only have structural data here, return it as final score too?
+        # Or penalize because hash is different?
+        # If hashes are different but structure is identical (1.0), it means CONTENT text changed.
+        # But we don't have text. So we must output a score < 1.0 to indicate change.
+        # If semantic_score is 1.0 but hashes differ, we should return e.g. 0.9 (UI Tweak?) or 0.8?
+        
+        final = semantic_score
+        if final >= 1.0 and fp1.hash != fp2.hash:
+            final = 0.80 # Force drop to reflect content change without structural change (Text update)
+            
+        return SimilarityMetrics(
+            semantic=round(semantic_score, 4),
+            final_score=round(final, 4)
+        )

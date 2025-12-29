@@ -107,3 +107,117 @@
 {"timestamp": "2025-12-29T15:54:28.201113+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-15.com..."}
 {"timestamp": "2025-12-29T15:54:28.856526+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-19.com..."}
 {"timestamp": "2025-12-29T15:54:28.857497+00:00", "level": "INFO", "component": "TestLoad", "message": "Processed 20 reqs in 6.77s"}
+{"timestamp": "2025-12-29T16:00:57.580470+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:00:57.582367+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:00:57.582414+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:00:57.582729+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:00:57.642128+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:00:57.642171+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:01:00.546619+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:01:00.547840+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:01:00.922169+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:01:01.442459+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:01:01.442554+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:01:01.454947+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: 0f3f4c5d... (vv2.0)"}
+{"timestamp": "2025-12-29T16:01:01.455050+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:03:20.152441+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:03:20.154458+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:03:20.154503+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:03:20.154816+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:03:20.216118+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:03:20.216164+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:03:22.634308+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:03:22.635811+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:03:23.028646+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:03:23.133000+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:03:23.133287+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:03:23.142161+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: e9b3ab18... (vv2.0)"}
+{"timestamp": "2025-12-29T16:03:23.142212+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:03:23.142290+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Similarity Score: 0.99"}
+{"timestamp": "2025-12-29T16:03:23.142313+00:00", "level": "INFO", "component": "SmokeTest", "message": "[5/6] Testing Forensic Diff Generation..."}
+{"timestamp": "2025-12-29T16:03:39.157553+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:03:39.159929+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:03:39.159977+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:03:39.160314+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:03:39.218652+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:03:39.218694+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:03:41.194098+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:03:41.195312+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:03:41.570545+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:03:42.145004+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:03:42.145063+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:03:42.153426+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: 6660031d... (vv2.0)"}
+{"timestamp": "2025-12-29T16:03:42.153474+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:03:42.153558+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Similarity Score: 0.99"}
+{"timestamp": "2025-12-29T16:03:42.153588+00:00", "level": "INFO", "component": "SmokeTest", "message": "[5/6] Testing Forensic Diff Generation..."}
+{"timestamp": "2025-12-29T16:04:24.047557+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:04:24.049446+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:04:24.049491+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:04:24.049820+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:04:24.107852+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:04:24.107895+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:04:26.348092+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:04:26.349505+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:04:26.725323+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:04:27.261614+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:04:27.261673+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:04:27.268381+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: 3fdb59de... (vv2.0)"}
+{"timestamp": "2025-12-29T16:04:27.268440+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:04:27.268533+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Similarity Score: 0.99"}
+{"timestamp": "2025-12-29T16:04:27.268558+00:00", "level": "INFO", "component": "SmokeTest", "message": "[5/6] Testing Forensic Diff Generation..."}
+{"timestamp": "2025-12-29T16:05:34.678400+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:05:34.680501+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:05:34.680600+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:05:34.680945+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:05:34.744341+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:05:34.744383+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:05:39.270266+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:05:39.272555+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:05:39.441428+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:05:39.526795+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:05:39.526876+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:05:39.534429+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: 3c890039... (vv2.0)"}
+{"timestamp": "2025-12-29T16:05:39.534475+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:05:39.534562+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Similarity Score: 0.99"}
+{"timestamp": "2025-12-29T16:05:39.534585+00:00", "level": "INFO", "component": "SmokeTest", "message": "[5/6] Testing Forensic Diff Generation..."}
+{"timestamp": "2025-12-29T16:05:39.534640+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Diff generated and within limits."}
+{"timestamp": "2025-12-29T16:05:39.534660+00:00", "level": "INFO", "component": "SmokeTest", "message": "[6/6] Testing History Archival..."}
+{"timestamp": "2025-12-29T16:06:23.955929+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:06:23.957615+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:06:23.957661+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:06:23.958012+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:06:24.018570+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:06:24.018611+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:06:27.117469+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:06:27.118780+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:06:27.277776+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:06:27.385881+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:06:27.385942+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:06:27.393071+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: 0371a471... (vv2.0)"}
+{"timestamp": "2025-12-29T16:06:27.393132+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:06:27.393229+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Similarity Score: 0.99"}
+{"timestamp": "2025-12-29T16:06:27.393256+00:00", "level": "INFO", "component": "SmokeTest", "message": "[5/6] Testing Forensic Diff Generation..."}
+{"timestamp": "2025-12-29T16:06:27.393322+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Diff generated and within limits."}
+{"timestamp": "2025-12-29T16:06:27.393347+00:00", "level": "INFO", "component": "SmokeTest", "message": "[6/6] Testing History Archival..."}
+{"timestamp": "2025-12-29T16:07:49.893036+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T16:07:49.894751+00:00", "level": "INFO", "component": "SmokeTest", "message": "\ud83d\udca8 Starting Pre-Deployment Smoke Test..."}
+{"timestamp": "2025-12-29T16:07:49.894793+00:00", "level": "INFO", "component": "SmokeTest", "message": "[1/6] Initializing Components..."}
+{"timestamp": "2025-12-29T16:07:49.895141+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T16:07:49.950015+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Metrics Tracker Active"}
+{"timestamp": "2025-12-29T16:07:49.950060+00:00", "level": "INFO", "component": "SmokeTest", "message": "[2/6] Testing Fetch (Google.com)..."}
+{"timestamp": "2025-12-29T16:07:55.111769+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com/robots.txt \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:07:55.113000+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching https://www.google.com..."}
+{"timestamp": "2025-12-29T16:07:55.281859+00:00", "level": "INFO", "component": "httpx", "message": "HTTP Request: GET https://www.google.com \"HTTP/1.1 200 OK\""}
+{"timestamp": "2025-12-29T16:07:55.389802+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fetch Success: 200"}
+{"timestamp": "2025-12-29T16:07:55.389858+00:00", "level": "INFO", "component": "SmokeTest", "message": "[3/6] Testing Fingerprinter..."}
+{"timestamp": "2025-12-29T16:07:55.396770+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Fingerprint Generated: 0fc0cb2e... (vv2.0)"}
+{"timestamp": "2025-12-29T16:07:55.396828+00:00", "level": "INFO", "component": "SmokeTest", "message": "[4/6] Testing Similarity Engine..."}
+{"timestamp": "2025-12-29T16:07:55.396919+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Similarity Score: 0.06"}
+{"timestamp": "2025-12-29T16:07:55.396992+00:00", "level": "INFO", "component": "SmokeTest", "message": "[5/6] Testing Forensic Diff Generation..."}
+{"timestamp": "2025-12-29T16:07:55.397067+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Diff generated and within limits."}
+{"timestamp": "2025-12-29T16:07:55.397090+00:00", "level": "INFO", "component": "SmokeTest", "message": "[6/6] Testing History Archival..."}
+{"timestamp": "2025-12-29T16:07:55.397217+00:00", "level": "INFO", "component": "HistoryManager", "message": "Archived 1 entries for https://test.com"}
+{"timestamp": "2025-12-29T16:07:55.397249+00:00", "level": "INFO", "component": "SmokeTest", "message": "\u2705 Archival Successful (Entry moved to archive)"}
+{"timestamp": "2025-12-29T16:07:55.397280+00:00", "level": "INFO", "component": "WebDogBot", "message": "Shutting down WebDog..."}
+{"timestamp": "2025-12-29T16:07:55.397546+00:00", "level": "INFO", "component": "WebDogBot", "message": "Shutdown complete."}
+{"timestamp": "2025-12-29T16:07:55.397583+00:00", "level": "INFO", "component": "SmokeTest", "message": "\n\ud83d\udfe2 SMOKE TEST PASSED: Bot is Structurally Production Ready."}

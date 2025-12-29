@@ -121,24 +121,39 @@ def get_settings_keyboard(config: Config, context_id: str = "GLOBAL") -> InlineK
     ]
     return InlineKeyboardMarkup(keyboard)
 
+import html
+
+# ... existing imports ...
+
+def escape_html(text: str) -> str:
+    """Helper to escape HTML special characters."""
+    return html.escape(str(text))
+
+# Alias for strict requirement compliance
+sanitize_html = escape_html
+
+# ... existing code ...
+
 def format_diff_message(url: str, score: float, classification: str, diff_text: str = "") -> str:
     """
     Formats the alert message with markdown.
     """
-    # Escape some chars if needed or use HTML. 
-    # We use HTML in main.py usually.
-    # MarkdownV2 is safer for code blocks.
+    # Escape for HTML safety
+    safe_url = escape_html(url)
+    safe_class = escape_html(classification)
     
     msg = (
-        f"🚨 <b>Change Detected: {url}</b>\n"
+        f"🚨 <b>Change Detected: {safe_url}</b>\n"
         f"Similarity: {int(score*100)}%\n"
-        f"Type: <i>{classification}</i>\n"
+        f"Type: <i>{safe_class}</i>\n"
     )
     
     if diff_text:
         # Truncate if MASSIVE even for telegram (max 4096 char msg)
         # diff_text should already be truncated by `change_detector` (3000 chars).
-        msg += f"\n<pre language='diff'>{diff_text}</pre>"
+        # Sanitize the diff block content!
+        safe_diff = escape_html(diff_text)
+        msg += f"\n<pre language='diff'>{safe_diff}</pre>"
         
     return msg
 

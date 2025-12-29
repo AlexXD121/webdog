@@ -2,6 +2,7 @@ import logging
 import os
 import asyncio
 import signal
+import html 
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from dotenv import load_dotenv
@@ -103,6 +104,7 @@ class WebDogBot:
         # Schedule Patrol
         # Memory Optimization: We use a job that loads data On-Demand
         job_queue.run_repeating(self.patrol_job, interval=60, first=10)
+        job_queue.run_repeating(self.cleanup_job, interval=3600, first=60)
         
         # Signal Handling (Manual since Application.run_polling handles generic ones, 
         # but we want custom shutdown logic).
@@ -255,6 +257,34 @@ class WebDogBot:
                     result = await self.request_manager.fetch(monitor.url)
                     monitor.metadata.check_count += 1
                     
+                    # Smart 429 Handling
+                    if result.status_code == 429:
+                        monitor.metadata.rate_limit_count += 1
+                        logger.warning(f"429 Too Many Requests for {monitor.url} (Count: {monitor.metadata.rate_limit_count})")
+                        
+                        if monitor.metadata.rate_limit_count >= 3:
+                            # Send Notification
+                            msg = (
+                                f"⚠️ <b>Rate Limit Detected: {html.escape(monitor.url)}</b>\n"
+                                f"Received 429 'Too Many Requests' 3 times in a row.\n"
+                                f"Suggestion: Increase check interval in Settings."
+                            )
+                            try:
+                                await get_governor().telegram_throttler.send_message(
+                                    context.bot.send_message(chat_id=chat_id, text=msg, parse_mode="HTML")
+                                )
+                                # Reset count to avoid spamming, or maybe set to 0?
+                                # Let's reset to 0 so we alert again if it persists for another 3 cycles.
+                                monitor.metadata.rate_limit_count = 0 
+                            except Exception as e:
+                                logger.error(f"Failed to send 429 alert: {e}")
+                        
+                        updates_needed = True
+                        continue # Skip processing
+                    
+                    # Reset 429 count on success (or other error) that isn't 429
+                    monitor.metadata.rate_limit_count = 0
+                    
                     if result.error or not result.content:
                         monitor.metadata.failure_count += 1
                         continue
@@ -302,6 +332,10 @@ class WebDogBot:
                  logger.critical(f"DB Write Failed: {e}")
                  # We don't crash, we just optimize to retry later or alert admin?
                  # ideally send alert to admin if configured.
+
+    async def cleanup_job(self, context: ContextTypes.DEFAULT_TYPE):
+        """Background task to clean up old exports."""
+        await asyncio.to_thread(HistoryManager.cleanup_exports, 60)
 
     # --- UI Helpers (Similar to refactored main) ---
     async def handle_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):

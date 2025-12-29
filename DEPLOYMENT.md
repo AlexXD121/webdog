@@ -51,9 +51,9 @@ Description=WebDog Professional
 After=network.target
 
 [Service]
-User=webdog
-WorkingDirectory=/opt/webdog
-ExecStart=/opt/webdog/venv/bin/python /opt/webdog/webdog_bot/main.py
+User=ubuntu
+WorkingDirectory=/home/ubuntu/webdog_bot
+ExecStart=/usr/bin/python3 /home/ubuntu/webdog_bot/main.py
 Restart=always
 RestartSec=5
 
@@ -66,7 +66,7 @@ WantedBy=multi-user.target
 ### Log Rotation
 The bot generates `webdog.log`. Configure `logrotate` to prevent disk overflow.
 ```
-/opt/webdog/webdog.log {
+/home/ubuntu/webdog_bot/webdog.log {
     daily
     rotate 7
     compress
@@ -80,7 +80,7 @@ The bot generates `webdog.log`. Configure `logrotate` to prevent disk overflow.
 Weekly off-site backups of `webdog_db.json` are recommended.
 ```bash
 # Crontab example (Weekly)
-0 3 * * 0 cp /opt/webdog/webdog_db.json /backups/webdog_$(date +\%F).json
+0 3 * * 0 cp /home/ubuntu/webdog_bot/webdog_bot/db.json /backups/webdog_$(date +\%F).json
 ```
 
 ## Troubleshooting

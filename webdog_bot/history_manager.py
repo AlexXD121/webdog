@@ -131,3 +131,22 @@ class HistoryManager:
         except Exception as e:
             logger.error(f"JSON Export failed: {e}")
             return ""
+
+    @staticmethod
+    def cleanup_exports(max_age_minutes: int = 60):
+        """
+        Deletes files in export directory older than max_age_minutes.
+        """
+        try:
+            cutoff = datetime.now() - timedelta(minutes=max_age_minutes)
+            count = 0
+            for file in EXPORT_DIR.glob("*"):
+                if file.is_file():
+                    mtime = datetime.fromtimestamp(file.stat().st_mtime)
+                    if mtime < cutoff:
+                        file.unlink()
+                        count += 1
+            if count > 0:
+                logger.info(f"Cleaned up {count} old export files.")
+        except Exception as e:
+            logger.error(f"Export cleanup failed: {e}")
