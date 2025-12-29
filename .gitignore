@@ -9,3 +9,6 @@ imp.txt
 # Python
 __pycache__/
 *.pyc
+
+# Kiro
+.kiro
