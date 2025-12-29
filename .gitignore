@@ -3,6 +3,8 @@
 webdog_bot/token
 token
 .env
+webdog_bot/imp.txt
+imp.txt
 
 # Python
 __pycache__/
