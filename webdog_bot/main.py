@@ -1,68 +1,30 @@
 import logging
-import hashlib
 import os
-import aiohttp
 from pathlib import Path
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
+from monitor import get_website_fingerprint
 
 # --- Configuration & Setup ---
 
 # Load environment variables
-# We need to explicitly point to the .env file in the parent dir
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
 # Grab the token
 TOKEN = os.getenv("TELEGRAM_TOKEN")
 if not TOKEN:
-    # Stop everything if we don't have a token
     raise ValueError(f"CRITICAL: No TELEGRAM_TOKEN found! checked path: {env_path}")
 
-# Set up logging for debugging
+# Set up logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
 # Global memory (simpler than a DB for now)
+# Structure: {chat_id: {"url": "...", "hash": "..."}}
 monitors = {}
-
-# --- Helper Functions ---
-
-async def get_website_fingerprint(url: str) -> str:
-    """
-    Downloads the page, strips out dynamic junk (scripts/styles),
-    and returns a unique hash (MD5) of the text content.
-    """
-    try:
-        # Use aiohttp for async requests (faster than requests library)
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status != 200:
-                    logging.warning(f"Failed to fetch {url} - Status: {response.status}")
-                    return None
-                
-                html = await response.text()
-                
-                # Parse HTML to get just the text
-                soup = BeautifulSoup(html, "html.parser")
-                
-                # Kill all script and style elements
-                # We don't care about CSS or JS changes, only content
-                for rubbish in soup(["script", "style", "meta"]):
-                    rubbish.decompose()
-                
-                # Get clean text
-                text = soup.get_text(separator=" ", strip=True)
-                
-                # Generate a hash so we don't have to store the whole page text
-                return hashlib.md5(text.encode("utf-8")).hexdigest()
-                
-    except Exception as e:
-        logging.error(f"Something went wrong while fingerprinting {url}: {e}")
-        return None
 
 # --- Bot Commands ---
 
@@ -78,25 +40,19 @@ async def watch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     chat_id = update.effective_chat.id
     
-    # Check if user actually sent a URL
     if not context.args:
         await update.message.reply_text("Hey, you forgot the URL! Try: /watch google.com")
         return
 
     url = context.args[0]
-    
-    # Quick fix if user forgets http://
     if not url.startswith(("http://", "https://")):
         url = "https://" + url
 
-    # Notify user we are working on it
     msg = await update.message.reply_text(f"🔍 Checking {url}... hang tight.")
 
-    # Get the initial baseline
     fingerprint = await get_website_fingerprint(url)
     
     if fingerprint:
-        # Save to memory (TODO: move this to a real database later)
         monitors[chat_id] = {"url": url, "hash": fingerprint}
         await context.bot.edit_message_text(
             chat_id=chat_id, 
@@ -110,6 +66,43 @@ async def watch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             text=f"❌ Oops, couldn't access {url}. Is the site down?"
         )
 
+# --- Background Jobs ---
+
+async def patrol_job(context: ContextTypes.DEFAULT_TYPE) -> None:
+    """
+    Background task that runs every 60 seconds.
+    Checks all monitored websites for changes.
+    """
+    if not monitors:
+        return
+
+    # Iterate over a copy of items to avoid issues if dict changes during iteration
+    for chat_id, data in list(monitors.items()):
+        url = data["url"]
+        old_hash = data["hash"]
+        
+        logging.info(f"Patrolling {url} for chat_id {chat_id}...")
+        
+        new_hash = await get_website_fingerprint(url)
+        
+        if new_hash is None:
+            # Site might be down or unreachable
+            logging.warning(f"Could not reach {url} during patrol.")
+            continue
+            
+        if new_hash != old_hash:
+            logging.info(f"CHANGE DETECTED for {url}!")
+            
+            # Alert the user
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=f"⚠️ <b>ALERT: Change Detected!</b>\n\nWebDog noticed a change on {url}.\nCheck it out before the client complains!",
+                parse_mode="HTML"
+            )
+            
+            # Update the hash so we don't spam alerts (only alert on NEW changes)
+            monitors[chat_id]["hash"] = new_hash
+
 # --- Main Execution ---
 
 def main() -> None:
@@ -117,10 +110,15 @@ def main() -> None:
     print("Starting WebDog Bot...")
     
     application = Application.builder().token(TOKEN).build()
+    job_queue = application.job_queue
 
     # Register commands
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("watch", watch))
+    
+    # Schedule the patrol job to run every 60 seconds
+    print("Starting Patrol Job (Every 60s)...")
+    job_queue.run_repeating(patrol_job, interval=60, first=10)
 
     print("Bot is polling...")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
