@@ -5,9 +5,11 @@ import os
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 import zlib
 import base64
+
+from models import UserData, Monitor, WeightedFingerprint, MonitorMetadata, ForensicSnapshot, ChangeType
 
 # --- Constants & Configuration ---
 DB_VERSION = "2.0"
@@ -32,11 +34,12 @@ class WriteOperation:
 class AtomicDatabaseManager:
     """
     Enterprise-grade database manager ensuring:
-    - Concurrency Safety (Single-Worker Write Queue)
-    - Atomic Persistence (Write-Tmp-Fsync-Rename)
-    - Storage Guards (Pre-flight disk check)
-    - Clock Resilience (UTC ISO 8601)
+    - Concurrency Safety
+    - Atomic Persistence
+    - Storage Guards
+    - Clock Resilience
     - Rolling Backups
+    - Schema Versioning & Migration
     """
 
     def __init__(self, db_path: Optional[Path] = None):
@@ -91,79 +94,137 @@ class AtomicDatabaseManager:
             finally:
                 self.write_queue.task_done()
 
-    async def load_all_monitors(self) -> Dict[str, List[dict]]:
+    async def load_all_monitors(self) -> Dict[str, UserData]:
         """
         Loads monitors from disk. Handles schema migration if needed.
-        Returns a dictionary of chat_id -> list of monitors.
+        Returns a dictionary of chat_id -> UserData objects.
         """
         if not self.db_path.exists():
             return {}
 
-        async with asyncio.Lock(): # Read lock for basic safety against external edit overlap check
+        async with asyncio.Lock(): 
             try:
-                # We use a run_in_executor for blocking IO read to avoid freezing event loop
                 loop = asyncio.get_running_loop()
-                data = await loop.run_in_executor(None, self._read_json_file)
+                raw_payload = await loop.run_in_executor(None, self._read_json_file)
                 
                 # Check Schema Version
-                loaded_version = data.get("schema_version", "1.0")
+                loaded_version = raw_payload.get("schema_version", "1.0")
+                data_content = raw_payload.get("data", raw_payload) # Fallback for v1 raw files
+
                 if loaded_version != DB_VERSION:
-                    self.logger.info(f"Schema mismatch (Found {loaded_version}, Expected {DB_VERSION}). Triggering migration logic if needed.")
-                    # In a real scenario, we would call a migration handler here.
-                    # For now, we assume backward compatibility or just update version on next write.
+                    self.logger.info(f"Schema mismatch (Found {loaded_version}, Expected {DB_VERSION}). Migrating...")
+                    migrated_data = self._migrate_data(data_content, loaded_version)
+                    
+                    # Schedule a save of the migrated data immediately
+                    # But we are inside a read lock/op. We should spawn a save or just return migrated 
+                    # objects and let the app save later. 
+                    # SAFE: We return objects. The next write will stick the new version.
+                    return migrated_data
                 
-                # Return the actual data payload. 
-                # If v1 (raw dict of chat_ids), wrap it. If v2 (has "data" key), return that.
-                if "data" in data:
-                    return data["data"]
-                else:
-                    # Migration from v1 likely happened or it's a raw file
-                    # If it looks like v1 { "123": [...] }, return it directly, 
-                    # but next write will wrap it in schema v2 structure.
-                    return data
+                # Deserialization for V2
+                return self._deserialize_v2(data_content)
 
             except Exception as e:
-                self.logger.error(f"Failed to load DB: {e}")
+                self.logger.error(f"Failed to load DB: {e}", exc_info=True)
                 return {}
+
+    def _deserialize_v2(self, data: dict) -> Dict[str, UserData]:
+        """Converts raw V2 JSON dict to UserData objects."""
+        result = {}
+        for chat_id, user_dict in data.items():
+            try:
+                # user_dict should have user_config, monitors, etc.
+                # If it's a list (intermediate state), we wrap it
+                if isinstance(user_dict, list):
+                     # Correct fix for intermediate format where chat_id matched to list of monitors directly
+                     monitors_list = [Monitor.from_dict(m) for m in user_dict]
+                     result[chat_id] = UserData(monitors=monitors_list)
+                else:
+                    # Full structure
+                    config = user_dict.get("user_config", {})
+                    monitors_raw = user_dict.get("monitors", [])
+                    monitors_objs = [Monitor.from_dict(m) for m in monitors_raw]
+                    result[chat_id] = UserData(monitors=monitors_objs)
+            except Exception as e:
+                self.logger.error(f"Error deserializing user {chat_id}: {e}")
+        return result
+
+    def _migrate_data(self, old_data: dict, old_version: str) -> Dict[str, UserData]:
+        """
+        Migrates legacy data structures to V2 UserData objects.
+        Supports:
+        - v1.0: {chat_id: {url: ..., hash: ...}} (Single monitor)
+        - v1.5: {chat_id: [ {url: ..., hash: ...}, ... ]} (List of monitors)
+        - v2.0 (Partial): {chat_id: UserData}
+        """
+        migrated = {}
+        
+        for chat_id, value in old_data.items():
+            if chat_id == "schema_version": continue
+
+            monitors_list = []
+            
+            # Case 1: Value is a single dict (Old v1)
+            if isinstance(value, dict) and "url" in value:
+                # {url: "...", hash: "..."}
+                m = Monitor(
+                    url=value["url"],
+                    fingerprint=WeightedFingerprint(hash=value.get("hash", ""), version="legacy")
+                )
+                monitors_list.append(m)
+                
+            # Case 2: Value is a list (Intermediate v1.5)
+            elif isinstance(value, list):
+                for item in value:
+                    if isinstance(item, dict) and "url" in item:
+                         m = Monitor(
+                            url=item["url"],
+                            fingerprint=WeightedFingerprint(hash=item.get("hash", ""), version="legacy")
+                        )
+                         monitors_list.append(m)
+            
+            # Case 3: Proper dict but maybe missing fields?
+            elif isinstance(value, dict) and "monitors" in value:
+                 # Already kind of V2
+                 pass # Should use normal deserializer, but here we construct fresh to be safe
+            
+            migrated[chat_id] = UserData(monitors=monitors_list)
+            
+        return migrated
 
     def _read_json_file(self) -> dict:
         """Blocking read helper."""
         with open(self.db_path, 'r', encoding='utf-8') as f:
             return json.load(f)
 
-    async def atomic_write(self, data: dict) -> bool:
+    async def atomic_write(self, data: Dict[str, UserData]) -> bool:
         """
         Schedule an atomic write operation.
-        
         Args:
-            data: The entire monitors dictionary {chat_id: [monitors]}.
-            
-        Raises:
-            InsufficientStorageError: If disk space is too low.
+            data: Dictionary of {chat_id: UserData object}
         """
-        # Pre-flight Guard
         if not self._check_disk_space():
             raise InsufficientStorageError(f"Available disk space is below {MIN_FREE_SPACE_MB}MB.")
 
-        # Create Future to wait for result
+        # Serialize Objects to Dictionary for JSON dumping
+        serialized_data = {
+            k: v.to_dict() for k, v in data.items()
+        }
+
         loop = asyncio.get_running_loop()
         future = loop.create_future()
         
-        # Enqueue
-        op = WriteOperation(data, future)
+        op = WriteOperation(serialized_data, future)
         await self.write_queue.put(op)
         
-        # Wait for completion
         return await future
 
     async def _perform_atomic_write(self, monitors_data: dict):
         """
         Executes the actual write logic:
-        1. Encapsulate in Schema V2 envelope.
-        2. Create Rolling Backup (if schema change/time based - here we do it on every write for safety or heuristic).
-           (Optimized: We can just backup if we are overwriting an existing file).
-        3. Normalize Timestamps.
-        4. Write .tmp -> fsync -> rename.
+        1. Encapsulate in Schema.
+        2. Create Rolling Backup logic.
+        3. Write to disk.
         """
         
         # 1. Structure Data
@@ -173,31 +234,11 @@ class AtomicDatabaseManager:
             "data": monitors_data
         }
 
-        # 2. Normalize Timestamps
-        final_payload = self._normalize_timestamps(final_payload)
-        
-        # 3. Create Backup (Blocking IO inside worker is acceptable as it's sequential)
-        # We only backup if file exists. 
-        # Strategy: To avoid spamming backups on every single ping update, usually we backup on migration.
-        # Requirement says: "Before any write that involves a schema change or migration...". 
-        # Since we are auto-migrating structure, let's check strict necessity. 
-        # However, for "Rolling Backups" in general, let's do safe rotation.
-        # We will implement a rotation distinct from every-write.
-        # For this logic, let's assume every write is critical enough or strictly follow "schema change".
-        # Let's verify if schema version changed from disk.
-        
-        # Simplified for robustness: Backup only if we detect we are upgrading/writing over old version.
-        # OR implementation detail: Let's do a backup if the file is older than X or simple rotation.
-        # Requirement: "Before any write... create a timestamped backup... Keep only last 5".
-        # Let's interpret strict requirement: We backup before write.
+        # 2. Manage Backups
         self._manage_backups()
 
-        # 4. Atomic Write Sequence
+        # 3. Write
         temp_file = self.db_path.parent / f"{self.db_path.name}.tmp"
-        
-        # Blocking IO in a thread pool to allow other loop tasks (like heartbeats) to tick if this was generic,
-        # but since we are in a dedicated worker coroutine, we can just do blocking IO or use executor.
-        # Using executor is safer for long writes.
         loop = asyncio.get_running_loop()
         await loop.run_in_executor(None, self._write_to_disk, temp_file, final_payload)
 
@@ -222,7 +263,6 @@ class AtomicDatabaseManager:
     def _check_disk_space(self) -> bool:
         """Checks if there is at least MIN_FREE_SPACE_MB available."""
         try:
-            # db_path parent might not exist if we are starting fresh in a new dir, checking CWD or parent
             check_path = self.db_path.parent if self.db_path.parent.exists() else Path(".")
             total, used, free = shutil.disk_usage(check_path)
             free_mb = free // (1024 * 1024)
@@ -256,55 +296,6 @@ class AtomicDatabaseManager:
         except Exception as e:
             self.logger.error(f"Backup failed: {e}")
 
-    def _normalize_timestamps(self, obj: Any) -> Any:
-        """
-        Recursively ensures all keys ending in '_at', '_time' or 'timestamp' 
-        are ISO 8601 UTC strings.
-        """
-        if isinstance(obj, dict):
-            new_dict = {}
-            for k, v in obj.items():
-                if k.endswith(('_at', '_time', 'timestamp')):
-                    new_dict[k] = self._ensure_utc_iso(v)
-                else:
-                    new_dict[k] = self._normalize_timestamps(v)
-            return new_dict
-        elif isinstance(obj, list):
-            return [self._normalize_timestamps(i) for i in obj]
-        else:
-            return obj
-
-    def _ensure_utc_iso(self, value: Any) -> str:
-        """Converts various time formats to strict UTC ISO 8601."""
-        if isinstance(value, str):
-            # Try to parse and reformat if it looks like a date,
-            # otherwise assume it might be valid or fallback.
-            # For simplicity, if it's already a string, we assume it's roughly correct 
-            # OR we try to parse it. specific requirement: generate and store.
-            # If we are reading existing data, we might want to normalize it.
-            try:
-                # Attempt flexible parsing
-                # Note: standard datetime.fromisoformat is picky before Py3.11 for some formats,
-                # but good enough for self-generated.
-                dt = datetime.fromisoformat(value.replace('Z', '+00:00'))
-                if dt.tzinfo is None:
-                    dt = dt.replace(tzinfo=timezone.utc)
-                else:
-                    dt = dt.astimezone(timezone.utc)
-                return dt.isoformat()
-            except ValueError:
-                return value # Return as is if parsing fails, or could set to now()
-        elif isinstance(value, (int, float)):
-            # Assume unix timestamp
-            dt = datetime.fromtimestamp(value, tz=timezone.utc)
-            return dt.isoformat()
-        elif isinstance(value, datetime):
-            if value.tzinfo is None:
-                value = value.replace(tzinfo=timezone.utc)
-            else:
-                value = value.astimezone(timezone.utc)
-            return value.isoformat()
-        return str(value)
 
 # Singleton Instance for convenience, though main.py should instantiate
 # db = AtomicDatabaseManager()

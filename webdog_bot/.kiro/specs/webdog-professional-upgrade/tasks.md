@@ -11,39 +11,39 @@
   - [x] Write comprehensive unit tests for atomic operations, concurrency safety, storage validation, and backup/restore functionality
   - _Requirements: 5.4, 6.2, 7.3_
 
-- [ ] 2. Implement enhanced data models with versioning support
-  - Extend JSON schema to include fingerprint versioning and forensic snapshots
-  - Create data classes for WeightedFingerprint, SimilarityMetrics, and ForensicSnapshot
-  - Implement schema migration logic for backward compatibility
-  - Add compressed snapshot storage using zlib compression
-  - Write unit tests for data model serialization and migration
+- [x] 2. Implement enhanced data models with versioning support
+  - [x] Extend JSON schema to include fingerprint versioning and forensic snapshots
+  - [x] Create data classes for WeightedFingerprint, SimilarityMetrics, and ForensicSnapshot
+  - [x] Implement schema migration logic for backward compatibility
+  - [x] Add compressed snapshot storage using zlib compression
+  - [x] Write unit tests for data model serialization and migration
   - _Requirements: 7.1, 7.2, 8.5_
 
-- [ ] 3. Build global request manager with de-duplication and hard timeouts
-  - Create GlobalRequestManager class with request collapsing functionality and resource leak prevention
-  - Implement strict 15-second hard timeouts using asyncio.wait_for to prevent zombie processes
-  - Add URL normalization for consistent de-duplication keys and request caching with 30-second TTL
-  - Create shared Future management for concurrent requests to same URL with proper cleanup
-  - Implement timeout exception handling and task cancellation for failed requests
-  - Write unit tests for request de-duplication, timeout behavior, and resource cleanup
+- [x] 3. Build global request manager with de-duplication and hard timeouts
+  - [x] Create GlobalRequestManager class with request collapsing functionality and resource leak prevention
+  - [x] Implement strict 15-second hard timeouts using asyncio.wait_for to prevent zombie processes
+  - [x] Add URL normalization for consistent de-duplication keys and request caching with 30-second TTL
+  - [x] Create shared Future management for concurrent requests to same URL with proper cleanup
+  - [x] Implement timeout exception handling and task cancellation for failed requests
+  - [x] Write unit tests for request de-duplication, timeout behavior, and resource cleanup
   - _Requirements: 6.1, 6.3, 3.5_
 
-- [ ] 4. Develop versioned content fingerprinting system with block-page detection
-  - Create VersionedContentFingerprinter class with algorithm versioning and anti-block validation
-  - Implement structure-aware content extraction with semantic weights and bot-blocking page detection
-  - Add noise filtering for timestamps, session IDs, and dynamic content with block-page indicators
-  - Create weighted fingerprint generation with content importance scoring and block validation
-  - Implement silent baseline reset for fingerprint version migrations without false alerts
-  - Add block-page detection for common bot-blocking strings (Cloudflare, DDoS-Guard, Captcha)
-  - Write unit tests for content extraction, fingerprint versioning, and block-page detection accuracy
+- [x] 4. Develop versioned content fingerprinting system with block-page detection
+  - [x] Create VersionedContentFingerprinter class with algorithm versioning and anti-block validation
+  - [x] Implement structure-aware content extraction with semantic weights and bot-blocking page detection
+  - [x] Add noise filtering for timestamps, session IDs, and dynamic content with block-page indicators
+  - [x] Create weighted fingerprint generation with content importance scoring and block validation
+  - [x] Implement silent baseline reset for fingerprint version migrations without false alerts
+  - [x] Add block-page detection for common bot-blocking strings (Cloudflare, DDoS-Guard, Captcha)
+  - [x] Write unit tests for content extraction, fingerprint versioning, and block-page detection accuracy
   - _Requirements: 2.1, 2.5, 8.1, 3.2_
 
-- [ ] 5. Implement multi-algorithm similarity detection
-  - Create comprehensive similarity calculation using Jaccard Index and Levenshtein distance
-  - Add semantic structure comparison for content analysis
-  - Implement weighted scoring system combining multiple similarity metrics
-  - Create change type classification (UI_TWEAK, CONTENT_UPDATE, MAJOR_OVERHAUL)
-  - Write unit tests with known similarity test cases and expected outcomes
+- [x] 5. Implement multi-algorithm similarity detection
+  - [x] Create comprehensive similarity calculation using Jaccard Index and Levenshtein distance
+  - [x] Add semantic structure comparison for content analysis
+  - [x] Implement weighted scoring system combining multiple similarity metrics
+  - [x] Create change type classification (UI_TWEAK, CONTENT_UPDATE, MAJOR_OVERHAUL)
+  - [x] Write unit tests with known similarity test cases and expected outcomes
   - _Requirements: 2.2, 2.3, 2.4_
 
 - [ ] 6. Build forensic change detection with Telegram payload safety
