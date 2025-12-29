@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 from monitor import get_website_fingerprint
+from database import load_all_monitors, save_monitor
 
 # --- Configuration & Setup ---
 
@@ -22,9 +23,10 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
-# Global memory (simpler than a DB for now)
-# Structure: {chat_id: {"url": "...", "hash": "..."}}
-monitors = {}
+# Global memory
+# Load from database on startup
+monitors = load_all_monitors()
+logging.info(f"Loaded {len(monitors)} monitors from database.")
 
 # --- Bot Commands ---
 
@@ -53,7 +55,12 @@ async def watch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     fingerprint = await get_website_fingerprint(url)
     
     if fingerprint:
-        monitors[chat_id] = {"url": url, "hash": fingerprint}
+        # Save to memory
+        monitors[str(chat_id)] = {"url": url, "hash": fingerprint}
+        
+        # Save to database
+        save_monitor(chat_id, url, fingerprint)
+        
         await context.bot.edit_message_text(
             chat_id=chat_id, 
             message_id=msg.message_id, 
@@ -101,7 +108,10 @@ async def patrol_job(context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             
             # Update the hash so we don't spam alerts (only alert on NEW changes)
-            monitors[chat_id]["hash"] = new_hash
+            monitors[str(chat_id)]["hash"] = new_hash
+            
+            # Update database
+            save_monitor(chat_id, url, new_hash)
 
 # --- Main Execution ---
 
