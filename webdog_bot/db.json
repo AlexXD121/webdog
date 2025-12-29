@@ -1,0 +1,38 @@
+{
+    "schema_version": "2.0",
+    "updated_at": "2025-12-29T15:48:22.648110+00:00",
+    "data": {
+        "12345": {
+            "user_config": {
+                "similarity_threshold": 0.85,
+                "check_interval": 60,
+                "include_diff": true,
+                "custom_selector": null
+            },
+            "monitors": [
+                {
+                    "url": "http://example.com",
+                    "fingerprint": {
+                        "hash": "0cbc6611f5540bd0809a388dc95a615b",
+                        "version": "v2.0",
+                        "algorithm": "weighted_semantic_v2",
+                        "content_weights": {},
+                        "structure_signature": ""
+                    },
+                    "metadata": {
+                        "created_at": "2025-12-29T15:48:22.594073+00:00",
+                        "last_check": "2025-12-29T15:48:22.647288+00:00",
+                        "check_count": 1,
+                        "failure_count": 0,
+                        "circuit_breaker_state": "CLOSED",
+                        "snooze_until": null
+                    },
+                    "forensic_snapshots": [],
+                    "history_log": [],
+                    "history_archive": [],
+                    "config": null
+                }
+            ]
+        }
+    }
+}

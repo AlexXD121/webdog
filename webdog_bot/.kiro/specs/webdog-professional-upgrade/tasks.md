@@ -92,50 +92,54 @@
   - [x] Write unit tests for metrics collection and health status reporting
   - _Requirements: 5.1, 6.4_
 
-- [ ] 11. Develop enhanced Telegram interface with inline keyboards
-  - Create inline keyboard layouts for main actions (Add Site, List Sites, Settings, Health)
-  - Implement smart snooze functionality with 1h, 6h, 24h options
-  - Add visual diff display in change notifications with markdown formatting
-  - Create pagination for monitor lists when users have >10 websites
-  - Implement bulk operations interface with checkbox selections
-  - Write unit tests for keyboard generation and callback handling
-  - _Requirements: 4.1, 4.2, 4.3, 4.5, 1.4_
+- [x] 11. Develop enhanced Telegram interface with inline keyboards
+  - [x] Create main action menu (Add, List, Settings, Health) triggered by /start
+  - [x] Implement smart snooze (1h/6h/24h) and action buttons for alerts
+  - [x] Add paginated monitor list with management controls per item
+  - [x] Integrate visual diff display into update notifications
+  - [x] Create centralized callback query handler for secure button interactions
+  - [x] Write unit tests for interface layout and interaction logic
+  - _Requirements: 2.1, 2.2, 5.3_, 4.5, 1.4_
 
-- [ ] 12. Build user configuration and customization system
-  - Create user settings management for similarity thresholds and check intervals
-  - Implement notification preferences (alert types, timing, formatting)
-  - Add per-website configuration options and expert mode settings
-  - Create settings validation with immediate feedback on invalid configurations
-  - Implement settings persistence and migration for schema changes
-  - Write unit tests for settings validation and persistence
-  - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
+- [x] 12. Build user configuration and customization system
+  - [x] Create user settings management for similarity thresholds and check intervals
+  - [x] Implement global defaults and per-site overrides
+  - [x] Create validaton layer to enforce minimum interval (30s)
+  - [x] Build interactive settings menu with inline keyboards
+  - [x] Write unit tests for configuration persistence and hierarchy resolution
+  - _Requirements: 3.1, 3.2, 3.3_
 
-- [ ] 13. Implement rate limiting and API compliance
-  - Create global RPS (Requests Per Second) governor for ethical scraping
-  - Implement Telegram API rate limiting (30 messages per second compliance)
-  - Add adaptive monitoring intervals based on system load
-  - Create request queuing and throttling mechanisms
-  - Implement backpressure handling when rate limits are exceeded
-  - Write unit tests for rate limiting behavior and queue management
-  - _Requirements: 6.1, 6.3, 6.4_
+- [x] 13. Implement rate limiting and API compliance
+  - [x] Create Global RPS Governor (Tokent Bucket, 5 RPS)
+  - [x] Implement Telegram Message Throttler (Strict 30 msg/s queue)
+  - [x] Integrate rate limiting into Request Manager (blocking acquire)
+  - [x] Implement congestion detection logic (Queue Depth > 50)
+  - [x] Write unit tests for timing accuracy and queue draining
+  - _Requirements: 8.4, 9.2, 5.2, 5.4_
 
-- [ ] 14. Develop change history and data export functionality
-  - Implement 30-day change history storage with metadata
-  - Create change history retrieval and display functionality
-  - Add data export capabilities in JSON and CSV formats
-  - Implement automatic data archiving when storage limits are reached
-  - Create data compression strategies for efficient storage usage
-  - Write unit tests for history management and export functionality
+- [x] 14. Develop change history and data export functionality
+  - [x] Implement 30-day change history storage with automatic pruning
+  - [x] Create serialized 'HistoryEntry' model
+  - [x] Build Data Export Engine (CSV & JSON generators)
+  - [x] Update Telegram Interface to view history and trigger exports
+  - [x] Write unit tests for retention policy and file generation
+  - _Requirements: 7.1, 7.2, 7.3, 7.4_
+  - [x] Create data compression strategies for efficient storage usage
+  - [x] Update unit tests to verify archival logic
   - _Requirements: 7.1, 7.2, 7.4, 7.5_
 
-- [ ] 15. Integrate all components with memory-optimized main controller
-  - Update main.py to implement job-based loading instead of loading entire database into memory
-  - Create JobBasedDataLoader for lightweight metadata caching and on-demand full config loading
-  - Implement proper dependency injection and component lifecycle management with resource cleanup
-  - Add graceful shutdown handling with proper async task cancellation and write queue draining
-  - Implement system startup validation and component health checks with failure recovery
-  - Create memory usage monitoring and optimization for large-scale deployments
-  - Write integration tests for complete monitoring workflows and memory usage patterns
+- [x] 15. Integrate all components with memory-optimized main controller
+  - [x] Refactor main.py into object-oriented WebDogBot class
+  - [x] Implement JobBasedDataLoader for efficient monitoring
+  - [x] Create centralized startup and shutdown lifecycle management
+  - [x] Write integration tests for full system flow
+  - [x] Verify memory usage stability under load
+  - _Requirements: 8.1, 8.2, 8.3, 8.5_
+  - [x] Implement proper dependency injection and component lifecycle management with resource cleanup
+  - [x] Add graceful shutdown handling with proper async task cancellation and write queue draining
+  - [x] Implement system startup validation and component health checks with failure recovery
+  - [x] Create memory usage monitoring and optimization for large-scale deployments
+  - [x] Write integration tests for complete monitoring workflows and memory usage patterns
   - _Requirements: 1.1, 1.2, 1.3, 5.3, 6.2_
 
 - [ ] 16. Create comprehensive test suite and validation

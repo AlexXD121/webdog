@@ -56,6 +56,34 @@ class ForensicSnapshot:
             return f"[Error Decompressing Snapshot: {e}]"
 
 @dataclass
+class Config:
+    similarity_threshold: float = 0.85
+    check_interval: int = 60
+    include_diff: bool = True
+    custom_selector: Optional[str] = None
+    
+    def __post_init__(self):
+        # Validation Logic
+        if self.check_interval < 30:
+            self.check_interval = 30 # Enforce minimum
+        if not (0.0 < self.similarity_threshold <= 1.0):
+            # Clamp or reset? Let's clamp.
+            self.similarity_threshold = max(0.01, min(1.0, self.similarity_threshold))
+            
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+@dataclass
+class HistoryEntry:
+    timestamp: str  # ISO 8601 UTC
+    change_type: str
+    similarity_score: float
+    summary: str
+    
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+@dataclass
 class MonitorMetadata:
     created_at: str  # ISO 8601 UTC
     last_check: Optional[str] = None
@@ -70,6 +98,9 @@ class Monitor:
     fingerprint: Optional[WeightedFingerprint] = None
     metadata: MonitorMetadata = field(default_factory=lambda: MonitorMetadata(created_at=datetime.now(timezone.utc).isoformat()))
     forensic_snapshots: List[ForensicSnapshot] = field(default_factory=list)
+    history_log: List[HistoryEntry] = field(default_factory=list)
+    history_archive: List[str] = field(default_factory=list) # Base64 encoded zlib compressed JSON lists
+    config: Optional[Config] = None # Per-monitor override
     
     def to_dict(self) -> dict:
         return asdict(self)
@@ -81,29 +112,33 @@ class Monitor:
         fp = WeightedFingerprint(**fp_data) if fp_data else None
         
         meta_data = data.get("metadata", {})
-        # Ensure default metadata if missing or partial
         if not meta_data:
              meta_data = {"created_at": datetime.now(timezone.utc).isoformat()}
         meta = MonitorMetadata(**meta_data)
         
         snapshots = [ForensicSnapshot(**s) for s in data.get("forensic_snapshots", [])]
         
+        hist_data = data.get("history_log", [])
+        history = [HistoryEntry(**h) for h in hist_data]
+        
+        archive = data.get("history_archive", [])
+        
+        cfg_data = data.get("config")
+        config = Config(**cfg_data) if cfg_data else None
+        
         return cls(
             url=data["url"],
             fingerprint=fp,
             metadata=meta,
-            forensic_snapshots=snapshots
+            forensic_snapshots=snapshots,
+            history_log=history,
+            history_archive=archive,
+            config=config
         )
 
 @dataclass
-class UserConfig:
-    similarity_threshold: float = 0.85
-    check_interval: int = 60
-    include_diff: bool = True
-
-@dataclass
 class UserData:
-    user_config: UserConfig = field(default_factory=UserConfig)
+    user_config: Config = field(default_factory=Config) # Global defaults
     monitors: List[Monitor] = field(default_factory=list)
 
     def to_dict(self) -> dict:

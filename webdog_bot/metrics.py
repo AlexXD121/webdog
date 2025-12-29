@@ -3,7 +3,7 @@ import shutil
 import logging
 from typing import Dict, Any, List, Deque
 from collections import deque
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger("MetricsTracker")
 
@@ -122,7 +122,7 @@ class MetricsTracker:
              alerts.append("CRITICAL: Low Disk Space")
              
         return {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "uptime_seconds": int(now - self._start_time),
             "performance": {
                 "avg_request_latency_sec": round(avg_latency, 3),

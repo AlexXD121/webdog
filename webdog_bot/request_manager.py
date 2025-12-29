@@ -8,7 +8,10 @@ from typing import Dict, Tuple, Optional
 from dataclasses import dataclass
 from urllib.robotparser import RobotFileParser
 
+
 from headers import get_random_headers
+from metrics import get_metrics_tracker
+from governor import get_governor
 from circuit_breaker import CircuitBreaker
 
 # Constants
@@ -113,9 +116,9 @@ class GlobalRequestManager:
             
         return self._robots_cache[base_url].can_fetch(user_agent, url)
 
-from metrics import get_metrics_tracker
 
-# ... (Imports remain, we add metrics import above or let Python handle it if I put it in Imports block. I'll add the import line.)
+
+# ...
 
     async def fetch(self, url: str) -> FetchResult:
         """
@@ -124,7 +127,12 @@ from metrics import get_metrics_tracker
         normalized_url = self.normalize_url(url)
         now = time.time()
         
-        # 0. Jitter
+        # 0. Global Rate Limiter (Token Bucket)
+        # We wait for token BEFORE doing anything expensive or queuing jitter.
+        # This acts as the "prioritized queue" entry gate implicitly via asyncio locking.
+        await get_governor().acquire_web_token()
+        
+        # 0.5 Jitter
         delay = random.uniform(MIN_JITTER, MAX_JITTER)
         logger.debug(f"Applying jitter {delay:.2f}s for {url}")
         await asyncio.sleep(delay)

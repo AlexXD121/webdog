@@ -1,0 +1,109 @@
+{"timestamp": "2025-12-29T15:47:05.573640+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:47:05.583704+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:47:05.644226+00:00", "level": "INFO", "component": "WebDogBot", "message": "Initializing WebDog Professional..."}
+{"timestamp": "2025-12-29T15:47:05.644971+00:00", "level": "INFO", "component": "WebDogBot", "message": "System Status at Boot: {'timestamp': '2025-12-29T15:47:05.644878Z', 'uptime_seconds': 0, 'performance': {'avg_request_latency_sec': 0.0, 'avg_db_write_latency_sec': 0.0, 'success_rate_24h_percent': 100.0, 'total_requests_24h': 0}, 'workers': {'active': 0, 'total': 0, 'saturation_percent': 0}, 'system': {'disk_free_mb': 56980}, 'alerts': []}"}
+{"timestamp": "2025-12-29T15:47:05.718212+00:00", "level": "INFO", "component": "WebDogBot", "message": "Shutting down WebDog..."}
+{"timestamp": "2025-12-29T15:47:05.725480+00:00", "level": "INFO", "component": "WebDogBot", "message": "Shutdown complete."}
+{"timestamp": "2025-12-29T15:48:22.509381+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:48:22.520163+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:48:22.581381+00:00", "level": "INFO", "component": "WebDogBot", "message": "Initializing WebDog Professional..."}
+{"timestamp": "2025-12-29T15:48:22.581728+00:00", "level": "INFO", "component": "WebDogBot", "message": "System Status at Boot: {'timestamp': '2025-12-29T15:48:22.581669+00:00', 'uptime_seconds': 0, 'performance': {'avg_request_latency_sec': 0.0, 'avg_db_write_latency_sec': 0.0, 'success_rate_24h_percent': 100.0, 'total_requests_24h': 0}, 'workers': {'active': 0, 'total': 0, 'saturation_percent': 0}, 'system': {'disk_free_mb': 56980}, 'alerts': []}"}
+{"timestamp": "2025-12-29T15:48:22.675353+00:00", "level": "INFO", "component": "WebDogBot", "message": "Shutting down WebDog..."}
+{"timestamp": "2025-12-29T15:48:22.683486+00:00", "level": "INFO", "component": "WebDogBot", "message": "Shutdown complete."}
+{"timestamp": "2025-12-29T15:49:42.298111+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:49:42.309086+00:00", "level": "INFO", "component": "TestE2E", "message": "Starting E2E Patrol Test..."}
+{"timestamp": "2025-12-29T15:49:42.310680+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:49:42.379809+00:00", "level": "ERROR", "component": "WebDogBot", "message": "Patrol Error https://changed-site.com: 'SimilarityEngine' object has no attribute 'calculate_similarity'"}
+{"timestamp": "2025-12-29T15:50:05.989077+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:50:06.000245+00:00", "level": "INFO", "component": "TestE2E", "message": "Starting E2E Patrol Test..."}
+{"timestamp": "2025-12-29T15:50:06.001918+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:50:06.068232+00:00", "level": "ERROR", "component": "WebDogBot", "message": "Patrol Error https://changed-site.com: 'SimilarityEngine' object has no attribute 'calculate_similarity'"}
+{"timestamp": "2025-12-29T15:50:31.539221+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:50:31.549661+00:00", "level": "INFO", "component": "TestE2E", "message": "Starting E2E Patrol Test..."}
+{"timestamp": "2025-12-29T15:50:31.551336+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:50:31.616654+00:00", "level": "ERROR", "component": "WebDogBot", "message": "Patrol Error https://changed-site.com: 'SimilarityEngine' object has no attribute 'calculate_similarity'"}
+{"timestamp": "2025-12-29T15:50:54.362953+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:50:54.375655+00:00", "level": "INFO", "component": "TestE2E", "message": "Starting E2E Patrol Test..."}
+{"timestamp": "2025-12-29T15:50:54.378775+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:50:54.442315+00:00", "level": "ERROR", "component": "WebDogBot", "message": "Patrol Error https://changed-site.com: 'SimilarityEngine' object has no attribute 'calculate_similarity'"}
+{"timestamp": "2025-12-29T15:51:24.253179+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:51:24.261240+00:00", "level": "INFO", "component": "TestE2E", "message": "Starting E2E Patrol Test..."}
+{"timestamp": "2025-12-29T15:51:24.262749+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:51:24.321296+00:00", "level": "INFO", "component": "TestE2E", "message": "E2E Patrol Test Passed."}
+{"timestamp": "2025-12-29T15:52:13.810839+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:52:13.819227+00:00", "level": "INFO", "component": "TestPerf", "message": "Initializing 1k Scale Test..."}
+{"timestamp": "2025-12-29T15:52:13.821050+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:52:13.888295+00:00", "level": "INFO", "component": "TestPerf", "message": "Starting Patrol Loop..."}
+{"timestamp": "2025-12-29T15:52:14.400351+00:00", "level": "INFO", "component": "TestPerf", "message": "Duration: 0.42s"}
+{"timestamp": "2025-12-29T15:52:14.400483+00:00", "level": "INFO", "component": "TestPerf", "message": "Memory Delta: 7.85 MB"}
+{"timestamp": "2025-12-29T15:52:14.404522+00:00", "level": "WARNING", "component": "asyncio", "message": "Executing <Task finished name='Task-2' coro=<TestPerformanceScale.test_scale_1000_monitors() done, defined at D:\\WebDog\\tests\\test_performance_scale.py:21> result=None created at E:\\Python\\Lib\\asyncio\\runners.py:109> took 0.585 seconds"}
+{"timestamp": "2025-12-29T15:52:37.405443+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:52:37.414170+00:00", "level": "INFO", "component": "TestChaos", "message": "Chaos 2: DB Write Failure..."}
+{"timestamp": "2025-12-29T15:52:37.415734+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:52:37.484083+00:00", "level": "INFO", "component": "TestChaos", "message": "Chaos 1: Network Blackout..."}
+{"timestamp": "2025-12-29T15:52:37.484967+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:52:37.485831+00:00", "level": "ERROR", "component": "WebDogBot", "message": "Patrol Error http://fail.com: Connection Reset"}
+{"timestamp": "2025-12-29T15:52:37.485874+00:00", "level": "INFO", "component": "TestChaos", "message": "Patrol survived blackout."}
+{"timestamp": "2025-12-29T15:53:10.855764+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:53:10.864305+00:00", "level": "INFO", "component": "TestChaos", "message": "Chaos 2: DB Write Failure..."}
+{"timestamp": "2025-12-29T15:53:10.865787+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:53:10.923513+00:00", "level": "CRITICAL", "component": "WebDogBot", "message": "DB Write Failed: Disk Full"}
+{"timestamp": "2025-12-29T15:53:10.923563+00:00", "level": "INFO", "component": "TestChaos", "message": "Patrol survived DB crash."}
+{"timestamp": "2025-12-29T15:53:10.933883+00:00", "level": "INFO", "component": "TestChaos", "message": "Chaos 1: Network Blackout..."}
+{"timestamp": "2025-12-29T15:53:10.934914+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:53:10.935782+00:00", "level": "ERROR", "component": "WebDogBot", "message": "Patrol Error http://fail.com: Connection Reset"}
+{"timestamp": "2025-12-29T15:53:10.935825+00:00", "level": "INFO", "component": "TestChaos", "message": "Patrol survived blackout."}
+{"timestamp": "2025-12-29T15:53:34.593479+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:53:34.601808+00:00", "level": "INFO", "component": "TestLoad", "message": "Load 2: Telegram Message Flooding (30 msg/s)..."}
+{"timestamp": "2025-12-29T15:53:34.602857+00:00", "level": "INFO", "component": "RateGovernor", "message": "Telegram Throttler started."}
+{"timestamp": "2025-12-29T15:53:34.668355+00:00", "level": "INFO", "component": "TestLoad", "message": "Processed 100 msgs in 0.07s"}
+{"timestamp": "2025-12-29T15:53:34.678404+00:00", "level": "INFO", "component": "TestLoad", "message": "Load 1: Web Request Flooding (5 RPS)..."}
+{"timestamp": "2025-12-29T15:53:34.679756+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:53:35.851231+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-2.com..."}
+{"timestamp": "2025-12-29T15:53:36.228019+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-6.com..."}
+{"timestamp": "2025-12-29T15:53:37.063067+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-7.com..."}
+{"timestamp": "2025-12-29T15:53:37.189042+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-0.com..."}
+{"timestamp": "2025-12-29T15:53:37.676196+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-3.com..."}
+{"timestamp": "2025-12-29T15:53:37.902172+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-5.com..."}
+{"timestamp": "2025-12-29T15:53:37.995804+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-1.com..."}
+{"timestamp": "2025-12-29T15:53:38.016993+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-8.com..."}
+{"timestamp": "2025-12-29T15:53:38.330725+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-11.com..."}
+{"timestamp": "2025-12-29T15:53:38.356235+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-4.com..."}
+{"timestamp": "2025-12-29T15:53:38.515845+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-16.com..."}
+{"timestamp": "2025-12-29T15:53:38.539369+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-17.com..."}
+{"timestamp": "2025-12-29T15:53:38.885840+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-9.com..."}
+{"timestamp": "2025-12-29T15:53:39.582580+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-18.com..."}
+{"timestamp": "2025-12-29T15:53:39.871433+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-13.com..."}
+{"timestamp": "2025-12-29T15:53:40.032941+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-10.com..."}
+{"timestamp": "2025-12-29T15:53:40.303242+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-14.com..."}
+{"timestamp": "2025-12-29T15:53:40.851463+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-19.com..."}
+{"timestamp": "2025-12-29T15:53:40.915565+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-12.com..."}
+{"timestamp": "2025-12-29T15:53:41.065022+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-15.com..."}
+{"timestamp": "2025-12-29T15:53:41.065772+00:00", "level": "INFO", "component": "TestLoad", "message": "Processed 20 reqs in 6.32s"}
+{"timestamp": "2025-12-29T15:54:18.999625+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:54:19.008496+00:00", "level": "INFO", "component": "TestLoad", "message": "Load 2: Telegram Message Flooding (30 msg/s)..."}
+{"timestamp": "2025-12-29T15:54:19.009530+00:00", "level": "INFO", "component": "RateGovernor", "message": "Telegram Throttler started."}
+{"timestamp": "2025-12-29T15:54:22.013987+00:00", "level": "INFO", "component": "TestLoad", "message": "Processed 100 msgs in 3.00s"}
+{"timestamp": "2025-12-29T15:54:22.022474+00:00", "level": "INFO", "component": "TestLoad", "message": "Load 1: Web Request Flooding (5 RPS)..."}
+{"timestamp": "2025-12-29T15:54:22.023946+00:00", "level": "INFO", "component": "AtomicDB", "message": "Database write worker started."}
+{"timestamp": "2025-12-29T15:54:23.404269+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-0.com..."}
+{"timestamp": "2025-12-29T15:54:23.609071+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-2.com..."}
+{"timestamp": "2025-12-29T15:54:24.577230+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-9.com..."}
+{"timestamp": "2025-12-29T15:54:24.738751+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-5.com..."}
+{"timestamp": "2025-12-29T15:54:25.045823+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-4.com..."}
+{"timestamp": "2025-12-29T15:54:25.089939+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-8.com..."}
+{"timestamp": "2025-12-29T15:54:25.208062+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-3.com..."}
+{"timestamp": "2025-12-29T15:54:25.273214+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-6.com..."}
+{"timestamp": "2025-12-29T15:54:25.490473+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-14.com..."}
+{"timestamp": "2025-12-29T15:54:25.803353+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-13.com..."}
+{"timestamp": "2025-12-29T15:54:25.804215+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-7.com..."}
+{"timestamp": "2025-12-29T15:54:26.482900+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-1.com..."}
+{"timestamp": "2025-12-29T15:54:26.720718+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-16.com..."}
+{"timestamp": "2025-12-29T15:54:26.991150+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-10.com..."}
+{"timestamp": "2025-12-29T15:54:27.112706+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-18.com..."}
+{"timestamp": "2025-12-29T15:54:27.144962+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-17.com..."}
+{"timestamp": "2025-12-29T15:54:27.344143+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-11.com..."}
+{"timestamp": "2025-12-29T15:54:27.359700+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-12.com..."}
+{"timestamp": "2025-12-29T15:54:28.201113+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-15.com..."}
+{"timestamp": "2025-12-29T15:54:28.856526+00:00", "level": "INFO", "component": "GlobalRequestManager", "message": "[Network Call] Fetching http://site-19.com..."}
+{"timestamp": "2025-12-29T15:54:28.857497+00:00", "level": "INFO", "component": "TestLoad", "message": "Processed 20 reqs in 6.77s"}

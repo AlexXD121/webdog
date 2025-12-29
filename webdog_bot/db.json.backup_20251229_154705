@@ -1,0 +1,32 @@
+{
+    "schema_version": "2.0",
+    "updated_at": "2025-12-29T15:47:05.671787+00:00",
+    "data": {
+        "12345": {
+            "user_config": {
+                "similarity_threshold": 0.85,
+                "check_interval": 60,
+                "include_diff": true,
+                "custom_selector": null
+            },
+            "monitors": [
+                {
+                    "url": "http://example.com",
+                    "fingerprint": null,
+                    "metadata": {
+                        "created_at": "2025-12-29T15:47:05.669387+00:00",
+                        "last_check": null,
+                        "check_count": 0,
+                        "failure_count": 0,
+                        "circuit_breaker_state": "CLOSED",
+                        "snooze_until": null
+                    },
+                    "forensic_snapshots": [],
+                    "history_log": [],
+                    "history_archive": [],
+                    "config": null
+                }
+            ]
+        }
+    }
+}

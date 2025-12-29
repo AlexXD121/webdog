@@ -8,6 +8,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any, Union
 import zlib
 import base64
+import time
+from metrics import get_metrics_tracker
 
 from models import UserData, Monitor, WeightedFingerprint, MonitorMetadata, ForensicSnapshot, ChangeType
 
@@ -77,8 +79,6 @@ class AtomicDatabaseManager:
         self.write_worker_task = asyncio.create_task(self._write_worker_loop())
         self.logger.info("Database write worker started.")
 
-import time
-from metrics import get_metrics_tracker
 
     async def _write_worker_loop(self):
         """
