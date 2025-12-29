@@ -46,50 +46,50 @@
   - [x] Write unit tests with known similarity test cases and expected outcomes
   - _Requirements: 2.2, 2.3, 2.4_
 
-- [ ] 6. Build forensic change detection with Telegram payload safety
-  - Extend ChangeDetector to create compressed forensic snapshots with safe diff generation
-  - Implement Telegram payload safety with 3000-character diff truncation and summary generation
-  - Add forensic replay functionality for dispute resolution with compressed snapshot storage
-  - Create safe markdown diff generation that prevents Telegram API errors from oversized messages
-  - Implement diff summary generation for truncated content with line count statistics
-  - Limit forensic snapshots to last 3 changes per URL for storage efficiency
-  - Write unit tests for snapshot creation, compression, replay, and Telegram safety limits
+- [x] 6. Build forensic change detection with Telegram payload safety
+  - [x] Extend ChangeDetector to create compressed forensic snapshots with safe diff generation
+  - [x] Implement Telegram payload safety with 3000-character diff truncation and summary generation
+  - [x] Add forensic replay functionality for dispute resolution with compressed snapshot storage
+  - [x] Create safe markdown diff generation that prevents Telegram API errors from oversized messages
+  - [x] Implement diff summary generation for truncated content with line count statistics
+  - [x] Limit forensic snapshots to last 3 changes per URL for storage efficiency
+  - [x] Write unit tests for snapshot creation, compression, replay, and Telegram safety limits
   - _Requirements: 7.1, 7.2, 4.4_
 
-- [ ] 7. Implement circuit breaker pattern for resilient web fetching
-  - Create CircuitBreaker class with configurable failure thresholds
-  - Add state management (CLOSED, OPEN, HALF_OPEN) with recovery timeouts
-  - Implement failure counting and automatic recovery logic
-  - Integrate circuit breaker with website fetching operations
-  - Add circuit breaker state monitoring and reporting
-  - Write unit tests for circuit breaker state transitions and recovery
+- [x] 7. Implement circuit breaker pattern for resilient web fetching
+  - [x] Create CircuitBreaker class with configurable failure thresholds (3) and recovery timeouts (1h)
+  - [x] Implement Finite State Machine (CLOSED, OPEN, HALF_OPEN) for connection health tracking
+  - [x] Integrate circuit breaker with GlobalRequestManager to prevent cascading failures
+  - [x] Add auto-recovery logic with probing request in HALF_OPEN state
+  - [x] Implement immediate fast-fail for requests when circuit is OPEN
+  - [x] Write unit tests for state transitions, timeout recovery, and request blocking logic
   - _Requirements: 3.2, 3.4, 5.2_
 
-- [ ] 8. Develop anti-bot header rotation and spoofing system
-  - Create realistic browser signature pool with User-Agent rotation
-  - Implement comprehensive header spoofing (Sec-Ch-Ua, Accept, Accept-Language)
-  - Add cookie handling for session-locked websites
-  - Create randomized request timing with 1-5 second intervals
-  - Implement robots.txt respect and ethical scraping practices
-  - Write unit tests for header rotation and timing randomization
+- [x] 8. Develop anti-bot header rotation and spoofing system
+  - [x] Create realistic browser signature pool with User-Agent rotation
+  - [x] Implement comprehensive header spoofing (Sec-Ch-Ua, Accept, Accept-Language)
+  - [x] Add cookie handling for session-locked websites
+  - [x] Create randomized request timing with 1-5 second intervals
+  - [x] Implement robots.txt respect and ethical scraping practices
+  - [x] Write unit tests for header rotation and timing randomization
   - _Requirements: 3.1, 3.3, 3.5_
 
-- [ ] 9. Build structured logging system with correlation IDs
-  - Create StructuredLogger class with JSON-formatted output
-  - Implement correlation ID tracking using chat_id for cross-component debugging
-  - Add comprehensive error context including stack traces and system metrics
-  - Create log aggregation for error patterns and system health monitoring
-  - Implement log rotation and retention policies
-  - Write unit tests for log formatting and correlation ID propagation
+- [x] 9. Build structured logging system with correlation IDs
+  - [x] Create StructuredLogger class with JSON-formatted output
+  - [x] Implement correlation ID tracking using chat_id for cross-component debugging
+  - [x] Add comprehensive error context including stack traces and system metrics
+  - [x] Create log aggregation for error patterns and system health monitoring
+  - [x] Implement log rotation and retention policies
+  - [x] Write unit tests for log formatting and correlation ID propagation
   - _Requirements: 5.1, 5.5_
 
-- [ ] 10. Implement health monitoring and metrics collection
-  - Create system health metrics collection (response times, success rates, worker saturation)
-  - Add per-user statistics tracking and reporting
-  - Implement health endpoint or admin command for system status
-  - Create alerting for critical system metrics and thresholds
-  - Add performance monitoring for database operations and web requests
-  - Write unit tests for metrics collection and health status reporting
+- [x] 10. Implement health monitoring and metrics collection
+  - [x] Create system health metrics collection (response times, success rates, worker saturation)
+  - [x] Add per-user statistics tracking and reporting
+  - [x] Implement health endpoint or admin command for system status
+  - [x] Create alerting for critical system metrics and thresholds
+  - [x] Add performance monitoring for database operations and web requests
+  - [x] Write unit tests for metrics collection and health status reporting
   - _Requirements: 5.1, 6.4_
 
 - [ ] 11. Develop enhanced Telegram interface with inline keyboards

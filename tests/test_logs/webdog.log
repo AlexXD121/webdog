@@ -1,0 +1,2 @@
+{"timestamp": "2025-12-29T15:25:02.655720+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-29T15:25:02.656507+00:00", "level": "ERROR", "component": "ErrorTest", "message": "Math failed", "stack_trace": "Traceback (most recent call last):\n  File \"D:\\WebDog\\tests\\test_logging.py\", line 62, in test_error_stack_trace\n    1 / 0\n    ~~^~~\nZeroDivisionError: division by zero"}

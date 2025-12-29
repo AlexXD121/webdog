@@ -77,14 +77,23 @@ class AtomicDatabaseManager:
         self.write_worker_task = asyncio.create_task(self._write_worker_loop())
         self.logger.info("Database write worker started.")
 
+import time
+from metrics import get_metrics_tracker
+
     async def _write_worker_loop(self):
         """
         Consumer loop that processes write operations sequentially.
         """
         while True:
             write_op = await self.write_queue.get()
+            start_time = time.time()
             try:
                 await self._perform_atomic_write(write_op.data)
+                
+                # Record Metrics
+                duration = time.time() - start_time
+                get_metrics_tracker().record_db_operation(duration)
+                
                 if not write_op.future.done():
                     write_op.future.set_result(True)
             except Exception as e:
