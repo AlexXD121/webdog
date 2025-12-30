@@ -1,0 +1,12 @@
+.git
+.venv
+__pycache__
+*.pyc
+.env
+webdog.log
+smoke_output.txt
+webdog.service
+DEPLOYMENT.md
+ecosystem.config.js
+tests/
+exports/
