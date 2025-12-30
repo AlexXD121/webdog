@@ -2,7 +2,9 @@ import logging
 import os
 import asyncio
 import signal
-import html 
+import html
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from dotenv import load_dotenv
@@ -39,6 +41,26 @@ if not TOKEN:
 
 setup_logging("webdog.log")
 logger = logging.getLogger("WebDogBot")
+
+# --- Health Check Server (Cloud Compatibility) ---
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain")
+        self.end_headers()
+        self.wfile.write(b"WebDog is running")
+    
+    def log_message(self, format, *args):
+        pass # Silence console spam
+
+def start_health_check():
+    try:
+        port = int(os.environ.get("PORT", 8000))
+        server = HTTPServer(("0.0.0.0", port), HealthCheckHandler)
+        logger.info(f"Health Check Server listening on port {port}")
+        server.serve_forever()
+    except Exception as e:
+        logger.error(f"Health Check Server Failed to Start: {e}")
 
 class WebDogBot:
     """
@@ -88,6 +110,9 @@ class WebDogBot:
 
     async def run_bot(self):
         """Main Loop."""
+        # Start Background Health Check (Daemon)
+        threading.Thread(target=start_health_check, daemon=True).start()
+
         await self.startup()
         self.is_running = True
         
