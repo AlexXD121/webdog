@@ -12,6 +12,7 @@ __pycache__/
 
 
 # Runtime Data
+db.json
 webdog_bot/db.json
 webdog_bot/db.json.backup*
 webdog_bot/exports/

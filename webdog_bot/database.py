@@ -60,8 +60,13 @@ class AtomicDatabaseManager:
         if not self.db_path.exists():
             self._initialize_empty_db()
 
-        # Start the background worker
+        # Worker is started in startup()
+        # self._start_write_worker()
+
+    async def startup(self):
+        """Initializes the database manager and starts background workers."""
         self._start_write_worker()
+
 
     def _initialize_empty_db(self):
         """Creates an empty DB file with current version schema."""

@@ -1,2 +1,36 @@
-{"timestamp": "2025-12-29T15:25:02.655720+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
-{"timestamp": "2025-12-29T15:25:02.656507+00:00", "level": "ERROR", "component": "ErrorTest", "message": "Math failed", "stack_trace": "Traceback (most recent call last):\n  File \"D:\\WebDog\\tests\\test_logging.py\", line 62, in test_error_stack_trace\n    1 / 0\n    ~~^~~\nZeroDivisionError: division by zero"}
+{"timestamp": "2025-12-30T04:17:37.247995+00:00", "level": "INFO", "component": "System", "message": "Logging system initialized."}
+{"timestamp": "2025-12-30T04:17:37.248635+00:00", "level": "ERROR", "component": "ErrorTest", "message": "Math failed", "stack_trace": "Traceback (most recent call last):\n  File \"D:\\WebDog\\tests\\test_logging.py\", line 62, in test_error_stack_trace\n    1 / 0\n    ~~^~~\nZeroDivisionError: division by zero"}
+{"timestamp": "2025-12-30T04:17:37.264188+00:00", "level": "INFO", "component": "MetricsTest", "message": "Test 2: Alerts Logic"}
+{"timestamp": "2025-12-30T04:17:37.264385+00:00", "level": "INFO", "component": "MetricsTest", "message": "Alerts: ['CRITICAL: Success rate below 80%']"}
+{"timestamp": "2025-12-30T04:17:37.264804+00:00", "level": "INFO", "component": "MetricsTest", "message": "Test 1: Request Calculations"}
+{"timestamp": "2025-12-30T04:17:37.265003+00:00", "level": "INFO", "component": "MetricsTest", "message": "Performance Stats: {'avg_request_latency_sec': 0.1, 'avg_db_write_latency_sec': 0.0, 'success_rate_24h_percent': 50.0, 'total_requests_24h': 100}"}
+{"timestamp": "2025-12-30T04:17:37.265156+00:00", "level": "INFO", "component": "MetricsTest", "message": "Test 3: Worker Stats"}
+{"timestamp": "2025-12-30T04:17:37.268423+00:00", "level": "INFO", "component": "TestPerf", "message": "Initializing 1k Scale Test..."}
+{"timestamp": "2025-12-30T04:17:37.271370+00:00", "level": "INFO", "component": "TestPerf", "message": "Starting Patrol Loop..."}
+{"timestamp": "2025-12-30T04:17:37.895637+00:00", "level": "INFO", "component": "TestPerf", "message": "Duration: 0.50s"}
+{"timestamp": "2025-12-30T04:17:37.895773+00:00", "level": "INFO", "component": "TestPerf", "message": "Memory Delta: 10.35 MB"}
+{"timestamp": "2025-12-30T04:17:37.901480+00:00", "level": "WARNING", "component": "asyncio", "message": "Executing <Task finished name='Task-67' coro=<TestPerformanceScale.test_scale_1000_monitors() done, defined at D:\\WebDog\\tests\\test_performance_scale.py:21> result=None created at E:\\Python\\Lib\\asyncio\\runners.py:109> took 0.633 seconds"}
+{"timestamp": "2025-12-30T04:17:37.908054+00:00", "level": "INFO", "component": "SimilarityTest", "message": "Test Case 1: UI Tweak (High Similarity)"}
+{"timestamp": "2025-12-30T04:17:37.908619+00:00", "level": "INFO", "component": "SimilarityTest", "message": "UI Tweak Metrics: SimilarityMetrics(jaccard=0.9259, levenshtein=0.9821, semantic=1.0, final_score=0.9632)"}
+{"timestamp": "2025-12-30T04:17:37.908656+00:00", "level": "INFO", "component": "SimilarityTest", "message": "SUCCESS: UI Tweak correctly classified."}
+{"timestamp": "2025-12-30T04:17:37.908951+00:00", "level": "INFO", "component": "SimilarityTest", "message": "Test Case 2: Major Overhaul (Low Similarity)"}
+{"timestamp": "2025-12-30T04:17:37.909456+00:00", "level": "INFO", "component": "SimilarityTest", "message": "Major Overhaul Metrics: SimilarityMetrics(jaccard=0.0556, levenshtein=0.3178, semantic=0.0, final_score=0.1493)"}
+{"timestamp": "2025-12-30T04:17:37.909500+00:00", "level": "INFO", "component": "SimilarityTest", "message": "SUCCESS: Major Overhaul correctly classified."}
+{"timestamp": "2025-12-30T04:17:37.909754+00:00", "level": "INFO", "component": "SimilarityTest", "message": "Test Case 3: Threshold Logic"}
+{"timestamp": "2025-12-30T04:17:37.910010+00:00", "level": "INFO", "component": "SimilarityTest", "message": "Threshold Test Metrics: 0.8625"}
+{"timestamp": "2025-12-30T04:17:37.910043+00:00", "level": "INFO", "component": "SimilarityTest", "message": "SUCCESS: Threshold logic verified."}
+{"timestamp": "2025-12-30T04:17:37.912345+00:00", "level": "INFO", "component": "StealthTest", "message": "Test 1: Header Synchronization"}
+{"timestamp": "2025-12-30T04:17:37.912387+00:00", "level": "INFO", "component": "StealthTest", "message": "UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb... | Platform: \"Windows\""}
+{"timestamp": "2025-12-30T04:17:37.912415+00:00", "level": "INFO", "component": "StealthTest", "message": "UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap... | Platform: \"macOS\""}
+{"timestamp": "2025-12-30T04:17:37.912472+00:00", "level": "INFO", "component": "StealthTest", "message": "UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb... | Platform: \"Windows\""}
+{"timestamp": "2025-12-30T04:17:37.912495+00:00", "level": "INFO", "component": "StealthTest", "message": "UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb... | Platform: \"Windows\""}
+{"timestamp": "2025-12-30T04:17:37.912515+00:00", "level": "INFO", "component": "StealthTest", "message": "UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb... | Platform: \"Windows\""}
+{"timestamp": "2025-12-30T04:17:37.912534+00:00", "level": "INFO", "component": "StealthTest", "message": "SUCCESS: Headers are synchronized."}
+{"timestamp": "2025-12-30T04:17:37.931238+00:00", "level": "INFO", "component": "StealthTest", "message": "Test 2: Jitter (Random Delay)"}
+{"timestamp": "2025-12-30T04:17:37.933141+00:00", "level": "ERROR", "component": "GlobalRequestManager", "message": "Fetch failed: 'str' object has no attribute 'error'"}
+{"timestamp": "2025-12-30T04:17:37.933205+00:00", "level": "INFO", "component": "StealthTest", "message": "Jitter Delay Detected: 2.72s"}
+{"timestamp": "2025-12-30T04:17:37.933239+00:00", "level": "INFO", "component": "StealthTest", "message": "SUCCESS: Jitter verified."}
+{"timestamp": "2025-12-30T04:17:37.959215+00:00", "level": "INFO", "component": "StealthTest", "message": "Test 3: Robots.txt Compliance"}
+{"timestamp": "2025-12-30T04:17:39.341295+00:00", "level": "ERROR", "component": "GlobalRequestManager", "message": "Fetch failed: Blocked by Robots.txt directive"}
+{"timestamp": "2025-12-30T04:17:39.341442+00:00", "level": "INFO", "component": "StealthTest", "message": "Result Error: Fetch failed: Blocked by Robots.txt directive"}
+{"timestamp": "2025-12-30T04:17:39.341506+00:00", "level": "INFO", "component": "StealthTest", "message": "SUCCESS: Robots.txt blocking verified."}

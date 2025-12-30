@@ -15,12 +15,12 @@ def get_main_menu_keyboard() -> InlineKeyboardMarkup:
     """
     keyboard = [
         [
-            InlineKeyboardButton("➕ Add Site", callback_data="CMD_ADD"),
-            InlineKeyboardButton("📂 List Sites", callback_data="CMD_LIST_0")
+            InlineKeyboardButton("Add Site", callback_data="CMD_ADD"),
+            InlineKeyboardButton("List Sites", callback_data="CMD_LIST_0")
         ],
         [
-            InlineKeyboardButton("🏥 System Health", callback_data="CMD_HEALTH"),
-            InlineKeyboardButton("⚙️ Settings", callback_data="CMD_SETTINGS")
+            InlineKeyboardButton("System Health", callback_data="CMD_HEALTH"),
+            InlineKeyboardButton("Settings", callback_data="CMD_SETTINGS")
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -53,25 +53,25 @@ def get_monitor_list_keyboard(monitors: list, page: int = 0) -> InlineKeyboardMa
             url_label = url_label[:17] + "..."
             
         row = [
-            InlineKeyboardButton(f"🔗 {url_label}", callback_data=f"DETAILS_{m.url}"),
-            InlineKeyboardButton("🗑️", callback_data=f"DELETE_{m.url}")
+            InlineKeyboardButton(f"{url_label}", callback_data=f"DETAILS_{m.url}"),
+            InlineKeyboardButton("DEL", callback_data=f"DELETE_{m.url}")
         ]
         keyboard.append(row)
 
     # Navigation Row
     nav_row = []
     if page > 0:
-        nav_row.append(InlineKeyboardButton("⬅️ Prev", callback_data=f"CMD_LIST_{page-1}"))
+        nav_row.append(InlineKeyboardButton("Prev", callback_data=f"CMD_LIST_{page-1}"))
     
     nav_row.append(InlineKeyboardButton(f"{page+1}/{total_pages if total_pages > 0 else 1}", callback_data="NOOP"))
     
     if page < total_pages - 1:
-        nav_row.append(InlineKeyboardButton("Next ➡️", callback_data=f"CMD_LIST_{page+1}"))
+        nav_row.append(InlineKeyboardButton("Next", callback_data=f"CMD_LIST_{page+1}"))
         
     keyboard.append(nav_row)
     
     # Back to Menu
-    keyboard.append([InlineKeyboardButton("🔙 Main Menu", callback_data="CMD_MENU")])
+    keyboard.append([InlineKeyboardButton("Main Menu", callback_data="CMD_MENU")])
     
     return InlineKeyboardMarkup(keyboard)
 
@@ -81,12 +81,12 @@ def get_alert_keyboard(url: str) -> InlineKeyboardMarkup:
     """
     keyboard = [
         [
-            InlineKeyboardButton("💤 Snooze 1h", callback_data=f"SNOOZE_60_{url}"),
-            InlineKeyboardButton("💤 6h", callback_data=f"SNOOZE_360_{url}"),
-            InlineKeyboardButton("💤 24h", callback_data=f"SNOOZE_1440_{url}")
+            InlineKeyboardButton("Snooze 1h", callback_data=f"SNOOZE_60_{url}"),
+            InlineKeyboardButton("6h", callback_data=f"SNOOZE_360_{url}"),
+            InlineKeyboardButton("24h", callback_data=f"SNOOZE_1440_{url}")
         ],
         [
-             InlineKeyboardButton("🗑️ Stop Watching", callback_data=f"DELETE_{url}")
+             InlineKeyboardButton("Stop Watching", callback_data=f"DELETE_{url}")
         ]
         # Maybe "Mark as Recognized" (Update Baseline) is default behavior on similarity logic? 
         # Current logic auto-updates baseline.
@@ -109,14 +109,14 @@ def get_settings_keyboard(config: Config, context_id: str = "GLOBAL") -> InlineK
     
     keyboard = [
         [
-            InlineKeyboardButton(f"Sensitivity: {thresh_pct}% 🔄", callback_data=f"SET_CYCLE_THRESH_{context_id}"),
-            InlineKeyboardButton(f"Interval: {int_sec}s 🔄", callback_data=f"SET_CYCLE_INT_{context_id}")
+            InlineKeyboardButton(f"Sensitivity: {thresh_pct}%", callback_data=f"SET_CYCLE_THRESH_{context_id}"),
+            InlineKeyboardButton(f"Interval: {int_sec}s", callback_data=f"SET_CYCLE_INT_{context_id}")
         ],
         [
-             InlineKeyboardButton(f"Visual Diffs: {diff_state} 🔄", callback_data=f"SET_TOGGLE_DIFF_{context_id}")
+             InlineKeyboardButton(f"Visual Diffs: {diff_state}", callback_data=f"SET_TOGGLE_DIFF_{context_id}")
         ],
         [
-            InlineKeyboardButton("🔙 Done", callback_data="CMD_MENU" if context_id == "GLOBAL" else "CMD_LIST_0")
+            InlineKeyboardButton("Done", callback_data="CMD_MENU" if context_id == "GLOBAL" else "CMD_LIST_0")
         ]
     ]
     return InlineKeyboardMarkup(keyboard)
@@ -143,7 +143,7 @@ def format_diff_message(url: str, score: float, classification: str, diff_text: 
     safe_class = escape_html(classification)
     
     msg = (
-        f"🚨 <b>Change Detected: {safe_url}</b>\n"
+        f"Change Detected: {safe_url}\n"
         f"Similarity: {int(score*100)}%\n"
         f"Type: <i>{safe_class}</i>\n"
     )
@@ -163,11 +163,11 @@ def get_history_keyboard(url: str) -> InlineKeyboardMarkup:
     """
     keyboard = [
         [
-            InlineKeyboardButton("📄 Export CSV", callback_data=f"EXPORT_CSV_{url}"),
-            InlineKeyboardButton("💾 Export JSON", callback_data=f"EXPORT_JSON_{url}")
+            InlineKeyboardButton("Export CSV", callback_data=f"EXPORT_CSV_{url}"),
+            InlineKeyboardButton("Export JSON", callback_data=f"EXPORT_JSON_{url}")
         ],
         [
-            InlineKeyboardButton("🔙 Back to List", callback_data="CMD_LIST_0")
+            InlineKeyboardButton("Back to List", callback_data="CMD_LIST_0")
         ]
     ]
     return InlineKeyboardMarkup(keyboard)

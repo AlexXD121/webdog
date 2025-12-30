@@ -34,7 +34,7 @@ class TestInterface(unittest.TestCase):
         
         labels = [b.text for b in nav_row]
         logger.info(f"Page 0 Nav: {labels}")
-        self.assertIn("Next ➡️", str(labels))
+        self.assertIn("Next", str(labels))
         self.assertNotIn("Prev", str(labels))
         
         # Check Item Count (5 items + nav + menu? No, 5 item rows)

@@ -24,6 +24,7 @@ class TestLoadAPI(unittest.IsolatedAsyncioTestCase):
         """
         logger.info("Load 1: Web Request Flooding (5 RPS)...")
         bot = WebDogBot()
+        await bot.request_manager.startup() # FIX: Initialize Request Manager
         
         # Mock Fetch to be instant
         bot.request_manager._client.get = AsyncMock()
@@ -36,6 +37,8 @@ class TestLoadAPI(unittest.IsolatedAsyncioTestCase):
             tasks.append(bot.request_manager.fetch(f"http://site-{i}.com"))
             
         await asyncio.gather(*tasks)
+        
+        await bot.request_manager.close() # Cleanup
         
         duration = time.time() - start
         logger.info(f"Processed 20 reqs in {duration:.2f}s")
@@ -56,6 +59,11 @@ class TestLoadAPI(unittest.IsolatedAsyncioTestCase):
         Should take > 3s.
         """
         logger.info("Load 2: Telegram Message Flooding (30 msg/s)...")
+        
+        # FIX: Reset Singleton to ensure Queue binds to current Event Loop
+        from governor import GlobalGovernor
+        GlobalGovernor._instance = None
+        
         gov = get_governor()
         await gov.telegram_throttler.start()
         

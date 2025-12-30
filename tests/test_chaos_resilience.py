@@ -31,6 +31,10 @@ class TestChaosResilience(unittest.IsolatedAsyncioTestCase):
         monitor = Monitor(url="http://fail.com")
         mock_data = {"user": UserData(monitors=[monitor])}
         bot.db_manager.load_all_monitors = AsyncMock(return_value=mock_data)
+        
+        # FIX: Mock atomic_write to prevent CancelledError (background worker not running)
+        bot.db_manager.atomic_write = AsyncMock(return_value=True)
+        
         context = MagicMock()
         
         # Run Patrol

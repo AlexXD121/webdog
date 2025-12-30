@@ -59,10 +59,17 @@ class GlobalRequestManager:
         # normalized_domain -> RobotFileParser
         self._robots_cache: Dict[str, RobotFileParser] = {}
         
+        # self._client will be initialized in startup()
+        self._client: Optional[httpx.AsyncClient] = None
+
+    async def startup(self):
+        """Initializes the HTTP client."""
         self._client = httpx.AsyncClient(verify=False, follow_redirects=True, timeout=HARD_TIMEOUT)
 
+
     async def close(self):
-        await self._client.aclose()
+        if self._client:
+            await self._client.aclose()
         
     def _get_circuit(self, key: str) -> CircuitBreaker:
         if key not in self._circuits:
