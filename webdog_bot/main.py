@@ -13,12 +13,11 @@ from pathlib import Path
 from typing import Optional, Dict
 import copy
 
-# --- CRITICAL FIX: DNS MONKEY PATCH ---
-# Docker/HF DNS is failing to resolve api.telegram.org, but IP connectivity works.
-# We intercept socket.getaddrinfo to return the hardcoded IP for Telegram.
-# This MUST operate before any network calls or Telegram imports.
+# --- NETWORK CONFIGURATION: DNS PATCH ---
+# This patch forces the application to resolve api.telegram.org to its known IP address.
+# This bypasses the OS-level DNS resolver which often fails in restricted Docker environments.
 
-print("Applying DNS Monkey Patch for api.telegram.org...")
+print("Initializing Network Configuration...")
 _original_getaddrinfo = socket.getaddrinfo
 
 def _patched_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
@@ -26,21 +25,20 @@ def _patched_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
     Overrides DNS resolution for specific hosts to bypass OS-level resolver failures.
     """
     if host == "api.telegram.org":
-        # Known stable IP for api.telegram.org (Telegram API)
-        # We force return a valid IPv4 (AF_INET), TCP (SOCK_STREAM) socket address.
-        # This acts like a hardcoded /etc/hosts entry.
+        # Direct routing to Telegram API (Amsterdam/London Datacenter)
+        # 149.154.167.220 is the stable IP for api.telegram.org
         return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("149.154.167.220", port or 443))]
     
-    # Fallback to system resolver for everything else
+    # Fallback to system resolver for all other domains
     return _original_getaddrinfo(host, port, family, type, proto, flags)
 
-# Apply the patch
+# Apply the patch immediately
 socket.getaddrinfo = _patched_getaddrinfo
-print("DNS Monkey Patch APPLIED: api.telegram.org -> 149.154.167.220")
+print("DNS Patch Applied: api.telegram.org -> 149.154.167.220")
 
 
-# --- 1. CONFIGURATION & LOGGING ---
-# Force logs to stdout so they appear in Hugging Face console
+# --- 1. LOGGING CONFIGURATION ---
+# Configure logging to write directly to stdout for container visibility.
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -49,8 +47,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger("WebDogBot")
 
-# Load Environment Variables
-# Third-party Imports (Now safe to import as DNS patch is active)
+
+# --- 2. IMPORTS & ENVIRONMENT ---
+# Third-party imports are loaded after the DNS patch to ensure they use the patched socket.
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import (
@@ -60,6 +59,7 @@ from telegram.ext import (
     CallbackQueryHandler,
 )
 
+# Load environment variables
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
@@ -68,10 +68,10 @@ if not TOKEN:
     logger.critical("FATAL: No TELEGRAM_TOKEN found in environment variables.")
     sys.exit(1)
 
-# Ensure import paths work
+# Ensure internal module path is correct
 sys.path.append(str(Path(__file__).resolve().parent))
 
-# Safe Import of Internal Modules
+# Import internal modules
 try:
     from database import AtomicDatabaseManager
     from request_manager import GlobalRequestManager
@@ -87,8 +87,11 @@ except ImportError as e:
     sys.exit(1)
 
 
-# --- 2. HEALTH CHECK SERVER (Keeps Bot Awake) ---
+# --- 3. HEALTH CHECK SERVER ---
 class HealthCheckHandler(BaseHTTPRequestHandler):
+    """
+    Simple HTTP handler to respond to uptime checks (e.g., UptimeRobot).
+    """
     def do_GET(self):
         self.send_response(200)
         self.send_header("Content-type", "text/plain")
@@ -96,12 +99,12 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
         self.wfile.write(b"WebDog is running")
     
     def log_message(self, format, *args):
-        pass # Silence access logs
+        pass # Silence access logs to keep console clean
 
 def start_health_check_server():
     """Starts a simple HTTP server in a daemon thread."""
     try:
-        # Default to 7860 (Standard for Hugging Face Spaces)
+        # Port 7860 is the standard for Hugging Face Spaces
         port = int(os.environ.get("PORT", 7860))
         server = HTTPServer(("0.0.0.0", port), HealthCheckHandler)
         logger.info(f"Health Check Server listening on port {port}")
@@ -110,48 +113,40 @@ def start_health_check_server():
         logger.error(f"Failed to start Health Check Server: {e}")
 
 
-# --- 3. SMART NETWORK WAITER (The Fix) ---
+# --- 4. NETWORK DIAGNOSTIC ---
 async def wait_for_internet():
     """
-    Deep Network Diagnostic:
+    Performs a deep network diagnostic before starting the bot.
     1. Tests direct IP connectivity (Ping Google DNS).
-    2. Tests DNS resolution (Resolve Telegram API).
-    Retries until successful.
+    2. Tests DNS resolution/Connectivity to Telegram.
     """
-    logger.info("Performing deep network diagnostic...")
+    logger.info("Performing network connectivity check...")
     
     while True:
         try:
-            # CHECK 1: IP Connectivity (Can we reach the outside world?)
-            # Connect to Google DNS (8.8.8.8) on port 53 to test route
+            # Check 1: IP Connectivity
             socket.create_connection(("8.8.8.8", 53), timeout=2)
             
-            # CHECK 2: DNS Resolution (Can we translate names to IPs?)
-            # Even with monkey patch, this verifies our patch works or system works.
-            # If patch works, this returns instantly.
+            # Check 2: Telegram Connectivity (using patched DNS)
             try:
-                ip = socket.gethostbyname("api.telegram.org")
-                logger.info(f"INTERNET & DNS ARE WORKING! Resolved to: {ip}")
-                
-                # VERIFICATION STEP
-                # Explicitly prove the patch works by opening a socket to the resolved IP
-                logger.info("Verifying DNS Patch Connectivity...")
+                # We attempt to open a socket to the API to prove the route is open
                 socket.create_connection(('api.telegram.org', 443), timeout=3)
-                logger.info("DNS PATCH VERIFIED: Connected to Telegram IP via Override.")
-                
+                logger.info("Network and DNS verified. Proceeding to startup.")
                 return
             except Exception as e:
-                logger.warning(f"DNS/Connection Failure: {e}. Retrying...")
+                logger.warning(f"Connection to Telegram failed: {e}. Retrying...")
 
-                
         except (OSError, socket.timeout):
-            logger.warning("No Network Route (Container Network Sleeping). Retrying in 3s...")
+            logger.warning("No network route available. Waiting for container network...")
             
         await asyncio.sleep(3)
 
 
-# --- 4. WEBDOG BOT LOGIC ---
+# --- 5. BOT LOGIC CLASS ---
 class WebDogBot:
+    """
+    Main controller class for the WebDog application.
+    """
     def __init__(self):
         self.db_manager = AtomicDatabaseManager()
         self.request_manager = GlobalRequestManager()
@@ -160,29 +155,32 @@ class WebDogBot:
         self.application: Optional[Application] = None
         
     async def startup(self):
-        logger.info("WebDog Professional System Startup...")
+        """Initializes all subsystems."""
+        logger.info("Initializing WebDog Professional...")
         await self.db_manager.startup()
         await self.request_manager.startup()
         
         if not self.db_manager._check_disk_space():
-             logger.critical("Insufficient Disk Space!")
+             logger.critical("Insufficient Disk Space available.")
         
         status = get_metrics_tracker().get_system_status()
         logger.info(f"System Status: {status}")
 
         await get_governor().telegram_throttler.start()
-        logger.info("Core Systems Initialized")
+        logger.info("Core systems initialized successfully.")
 
     async def shutdown(self):
-        logger.info("Shutting down WebDog Bot...")
+        """Gracefully shuts down subsystems."""
+        logger.info("Shutting down WebDog...")
         if self.request_manager:
             await self.request_manager.close()
         await get_governor().telegram_throttler.stop()
 
-    # --- Handlers ---
+    # --- Command Handlers ---
+
     async def cmd_start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
-            f"<b>WebDog Professional</b>\nReady to guard.",
+            f"<b>WebDog Professional</b>\nReady to monitor.",
             reply_markup=interface.get_main_menu_keyboard(),
             parse_mode="HTML"
         )
@@ -197,7 +195,7 @@ class WebDogBot:
         if not url.startswith(("http", "https")): 
             url = "https://" + url
         
-        msg = await update.message.reply_text("Analyzing...")
+        msg = await update.message.reply_text("Analyzing target...")
         
         try:
             result = await self.request_manager.fetch(url)
@@ -211,6 +209,7 @@ class WebDogBot:
             all_data = await self.db_manager.load_all_monitors()
             user_data = all_data.get(chat_id, UserData())
             
+            # Update existing monitor or add new one
             user_data.monitors = [m for m in user_data.monitors if m.url != url]
             user_data.monitors.append(monitor)
             all_data[chat_id] = user_data
@@ -219,8 +218,8 @@ class WebDogBot:
             await context.bot.edit_message_text(chat_id=chat_id, message_id=msg.message_id, text=f"Watching {url}")
             
         except Exception as e:
-            logger.error(f"Watch failed: {e}", exc_info=True)
-            await context.bot.edit_message_text(chat_id=chat_id, message_id=msg.message_id, text="Error adding site.")
+            logger.error(f"Watch command failed: {e}", exc_info=True)
+            await context.bot.edit_message_text(chat_id=chat_id, message_id=msg.message_id, text="Error adding site to database.")
 
     async def cmd_unwatch(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = str(update.effective_chat.id)
@@ -268,7 +267,11 @@ class WebDogBot:
             await context.bot.send_message(str(update.effective_chat.id), f"Snoozing {parts[2]} for {parts[1]}m")
 
     # --- Job Queue Tasks ---
+
     async def patrol_job(self, context: ContextTypes.DEFAULT_TYPE):
+        """
+        Periodic task to check watched URLs for changes.
+        """
         if get_governor().is_congested:
              return 
 
@@ -281,6 +284,7 @@ class WebDogBot:
                     try:
                         config = monitor.config or user_data.user_config
                         
+                        # Check Snooze
                         if monitor.metadata.snooze_until:
                             snooze = datetime.fromisoformat(monitor.metadata.snooze_until)
                             if datetime.now(timezone.utc) < snooze: continue
@@ -288,16 +292,20 @@ class WebDogBot:
                                 monitor.metadata.snooze_until = None
                                 updates_needed = True
                         
+                        # Check Interval
                         if monitor.metadata.last_check:
                              last_ts = datetime.fromisoformat(monitor.metadata.last_check)
                              elapsed = (datetime.now(timezone.utc) - last_ts).total_seconds()
                              if elapsed < config.check_interval: continue
                         
+                        # Acquire Token
                         await get_governor().acquire_web_token()
                         
+                        # Fetch
                         result = await self.request_manager.fetch(monitor.url)
                         monitor.metadata.check_count += 1
                         
+                        # Handle Rate Limits (429)
                         if result.status_code == 429:
                             monitor.metadata.rate_limit_count += 1
                             if monitor.metadata.rate_limit_count >= 3:
@@ -312,10 +320,12 @@ class WebDogBot:
                         
                         monitor.metadata.rate_limit_count = 0
                         
+                        # Handle Fetch Errors
                         if result.error or not result.content:
                             monitor.metadata.failure_count += 1
                             continue
-                            
+                        
+                        # Comparison Logic
                         new_fp = self.fingerprinter.generate_fingerprint(result.content)
                         monitor.metadata.last_check = datetime.now(timezone.utc).isoformat()
                         
@@ -349,7 +359,8 @@ class WebDogBot:
     async def cleanup_job(self, context: ContextTypes.DEFAULT_TYPE):
         await asyncio.to_thread(HistoryManager.cleanup_exports, 60)
 
-    # --- Helper methods ---
+    # --- Helper Methods ---
+
     async def show_monitor_list(self, update, context, page, edit=False):
         chat_id = str(update.effective_chat.id)
         all_data = await self.db_manager.load_all_monitors()
@@ -407,7 +418,7 @@ class WebDogBot:
                  target_conf.include_diff = not target_conf.include_diff
              
              await self.db_manager.atomic_write(all_data)
-             await update.callback_query.edit_message_text(f"⚙️ <b>Settings</b>", reply_markup=interface.get_settings_keyboard(target_conf, context_id), parse_mode="HTML")
+             await update.callback_query.edit_message_text(f"<b>Settings</b>", reply_markup=interface.get_settings_keyboard(target_conf, context_id), parse_mode="HTML")
 
     async def show_monitor_details(self, update, url):
         chat_id = str(update.effective_chat.id)
@@ -419,7 +430,7 @@ class WebDogBot:
         kb = [
             [interface.InlineKeyboardButton("Settings", callback_data=f"OPEN_SETTINGS_{url}")],
             [interface.InlineKeyboardButton("History", callback_data=f"HISTORY_{url}"), interface.InlineKeyboardButton("Delete", callback_data=f"DELETE_{url}")],
-            [interface.InlineKeyboardButton("BACK", callback_data="CMD_LIST_0")]
+            [interface.InlineKeyboardButton("Back", callback_data="CMD_LIST_0")]
         ]
         await update.callback_query.edit_message_text(text, reply_markup=interface.InlineKeyboardMarkup(kb), parse_mode="HTML")
 
@@ -450,14 +461,17 @@ class WebDogBot:
             await self.db_manager.atomic_write(all_data)
 
 
-# --- 5. MAIN EXECUTION ---
+# --- 6. MAIN EXECUTION ---
 async def main():
+    """
+    Application entry point.
+    """
     logger.info("System entry point reached.")
 
     # 1. Start Health Check (Daemon)
     threading.Thread(target=start_health_check_server, daemon=True).start()
     
-    # 2. WAIT FOR INTERNET (Smart Fix)
+    # 2. WAIT FOR INTERNET (Verify Patch)
     await wait_for_internet()
     
     # 3. Instantiate and Startup Bot
@@ -469,7 +483,7 @@ async def main():
     application = Application.builder().token(TOKEN).build()
     
     if not application.job_queue:
-        logger.critical("JobQueue failed to initialize! Check requirements.txt.")
+        logger.critical("JobQueue failed to initialize. Ensure python-telegram-bot[job_queue] is installed.")
         sys.exit(1)
 
     # 5. Register Handlers
@@ -492,12 +506,13 @@ async def main():
     await application.updater.start_polling(allowed_updates=Update.ALL_TYPES)
     
     try:
-        # Wait forever
+        # Keep application running
         while True:
             await asyncio.sleep(3600)
     except (asyncio.CancelledError, KeyboardInterrupt):
-        logger.info("Stopping received...")
+        logger.info("Stop signal received...")
     finally:
+        logger.info("Shutting down Application...")
         try:
             if application.updater.running:
                 await application.updater.stop()
@@ -510,7 +525,7 @@ async def main():
         except Exception: pass
         
         await bot_logic.shutdown()
-        logger.info("Bye!")
+        logger.info("System Shutdown Complete.")
 
 if __name__ == "__main__":
     try:
